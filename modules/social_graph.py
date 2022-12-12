@@ -1,7 +1,6 @@
 import networkx as nx
 import pandas as pd
 import streamlit as st
-import pyautogui
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid import AgGrid, GridUpdateMode
 from bokeh.plotting import figure, from_networkx
@@ -22,7 +21,6 @@ def family_graph():
 
     st.markdown(text, unsafe_allow_html=True)
     st.write("---")
-    os.environ['DISPLAY'] = ':0'
     family_df = pd.read_excel('modules/azzubair_family.xlsx')
 
     col1, col2, col3 = st.columns(3)
@@ -72,7 +70,6 @@ def family_graph():
             if button_delete:
                 df_delete = family_df[~family_df.index.isin(sel_row_list)]
                 df_delete.to_excel('modules/azzubair_family.xlsx', index=False)
-                pyautogui.hotkey('f5')
 
 
     if not family_df.empty:
