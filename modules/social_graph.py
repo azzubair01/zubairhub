@@ -10,6 +10,9 @@ from bokeh.transform import cumsum, factor_cmap
 from bokeh.layouts import gridplot
 from bokeh.models import ColumnDataSource, GraphRenderer, LabelSet, BoxSelectTool, Circle, HoverTool, MultiLine, NodesAndLinkedEdges, Range1d
 from bokeh.models.tools import TapTool, PanTool, WheelZoomTool, SaveTool, ResetTool
+import os
+
+
 
 
 
@@ -19,7 +22,7 @@ def family_graph():
 
     st.markdown(text, unsafe_allow_html=True)
     st.write("---")
-
+    os.environ['DISPLAY'] = ':0'
     family_df = pd.read_excel('modules/azzubair_family.xlsx')
 
     col1, col2, col3 = st.columns(3)
