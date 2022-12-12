@@ -6,3 +6,4 @@ networkx==2.8.8
 bokeh==2.4.3
 streamlit-aggrid==0.3.3
 openpyxl==3.0.10
+pyautogui==0.9.53
