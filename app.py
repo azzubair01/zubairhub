@@ -15,7 +15,7 @@ image = Image.open(BytesIO(requests.get(
 newsize = (300, 300)
 image = image.resize(newsize)
 
-st.sidebar.image(image)
+#st.sidebar.image(image)
 text = '<p style="font-family:sans-serif; color:Black; font-size: 16px;">' \
        '◉ Muhammad Azzubair bin Azeman </br>' \
        '◉ Gombak, Selangor</br>' \
