@@ -3,18 +3,15 @@ import pandas as pd
 import streamlit as st
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid import AgGrid, GridUpdateMode
-from bokeh.plotting import figure, from_networkx
-from bokeh.palettes import Paired, Spectral4, Spectral7
-from bokeh.transform import cumsum, factor_cmap
+from bokeh.plotting import Figure, from_networkx
+from bokeh.palettes import Spectral4
 from bokeh.layouts import gridplot
-from bokeh.models import ColumnDataSource, GraphRenderer, LabelSet, BoxSelectTool, Circle, HoverTool, MultiLine, NodesAndLinkedEdges, Range1d
+from bokeh.models import ColumnDataSource, LabelSet, BoxSelectTool, Circle, HoverTool, MultiLine, NodesAndLinkedEdges, \
+    Range1d
 from bokeh.models.tools import TapTool, PanTool, WheelZoomTool, SaveTool, ResetTool
-import os
 
 
-
-
-
+@st.fragment
 def family_graph():
     text = "<h1 style='text-align: center; color: black;'>\
                   👨‍👩‍👧‍👦 Azzubair's Family Graph!</h1>"
@@ -41,12 +38,13 @@ def family_graph():
 
     if update_button:
         index = len(family_df)
-        family_df = family_df.append(pd.DataFrame({'Name': name, 'Parent': parent, 'Relationship': relationship}, index=[index]))
+        family_df = family_df.append(
+            pd.DataFrame({'Name': name, 'Parent': parent, 'Relationship': relationship}, index=[index]))
         family_df.to_excel('modules/azzubair_family.xlsx', index=False)
 
     # Display in table
     gd = GridOptionsBuilder.from_dataframe(family_df)
-    gd.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=5)
+    gd.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=10)
     gd.configure_selection(selection_mode='multiple', use_checkbox=True)
     gd.configure_default_column(editable=True, groupable=True, sorteable=True, filterable=True)
     grid_options = gd.build()
@@ -71,11 +69,9 @@ def family_graph():
                 df_delete = family_df[~family_df.index.isin(sel_row_list)]
                 df_delete.to_excel('modules/azzubair_family.xlsx', index=False)
 
-
     if not family_df.empty:
 
         G = nx.from_pandas_edgelist(family_df, source='Name', target='Parent', edge_attr=True)
-
 
         # Generate the layout and set the 'pos' attribute
         pos = nx.drawing.layout.spring_layout(G)
@@ -93,29 +89,28 @@ def family_graph():
             edge_y.append(y1)
             edge_y.append(None)
 
-        print(G.nodes._nodes)
-
         graph_renderer = from_networkx(G, layout_function=nx.spring_layout)
-        plot = figure(height=550, width=600, tools="pan,wheel_zoom,save,reset", active_scroll='wheel_zoom',
+        plot = Figure(height=550, width=600, tools="pan,wheel_zoom,save,reset", active_scroll='wheel_zoom',
                       x_range=Range1d(-1.1, 1.1), y_range=Range1d(-1.1, 1.1), title='')
         plot.title.text = ""
-        graph_renderer.node_renderer.glyph = Circle(size=15, fill_color=Spectral4[3])
-        graph_renderer.node_renderer.selection_glyph = Circle(size=15, fill_color=Spectral4[2])
-        graph_renderer.node_renderer.hover_glyph = Circle(size=15, fill_color=Spectral4[1])
+        graph_renderer.node_renderer.glyph = Circle(radius=0.01, fill_color=Spectral4[3])
+        graph_renderer.node_renderer.selection_glyph = Circle(radius=0.01, fill_color=Spectral4[2])
+        graph_renderer.node_renderer.hover_glyph = Circle(radius=0.01, fill_color=Spectral4[1])
         graph_renderer.edge_renderer.glyph = MultiLine(line_color="lightblue", line_width="edge_width", )
         graph_renderer.edge_renderer.selection_glyph = MultiLine(line_color=Spectral4[2], line_width="edge_width")
         graph_renderer.edge_renderer.hover_glyph = MultiLine(line_color=Spectral4[1], line_width="edge_width")
         graph_renderer.selection_policy = NodesAndLinkedEdges()
         graph_renderer.inspection_policy = NodesAndLinkedEdges()
         HOVER_TOOLTIPS = [("Item", "@index")]
-        plot.add_tools(HoverTool(tooltips=HOVER_TOOLTIPS), WheelZoomTool(), TapTool(), BoxSelectTool(), PanTool(), SaveTool(), ResetTool())
+        plot.add_tools(HoverTool(tooltips=HOVER_TOOLTIPS), WheelZoomTool(), TapTool(), BoxSelectTool(), PanTool(),
+                       SaveTool(), ResetTool())
         plot.renderers.append(graph_renderer)
         x, y = zip(*graph_renderer.layout_provider.graph_layout.values())
         node_labels = list(graph_renderer.layout_provider.graph_layout.keys())
         source = ColumnDataSource({'x': x, 'y': y,
                                    'item': [node_labels[i] for i in range(len(x))]})
         labels = LabelSet(x='x', y='y', text='item', source=source,
-                          background_fill_color='white', text_font_size='8px')
+                          background_fill_color='white', text_font_size='10px')
         plot.renderers.append(labels)
         # plot.outline_line_color = None
         # plot.xgrid.grid_line_color = None
