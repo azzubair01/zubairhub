@@ -8,3 +8,9 @@ streamlit-aggrid==1.0.5
 openpyxl==3.1.5
 pyautogui==0.9.53
 numpy==1.26.4
+plotly==5.23.0
+xlsxwriter==3.2.0
+transformers
+torch
+torchvision
+seaborn

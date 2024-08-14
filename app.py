@@ -4,7 +4,8 @@ from io import BytesIO
 import requests
 from modules.social_graph import (family_graph)
 from modules.introduction import (intro)
-from modules.computer_vision import detect_labels
+from modules.personal import transform_sap_data
+# from modules.computer_vision import (detect_object)
 
 
 st.set_page_config(page_title="Azzubair's Webapp", page_icon="📊", layout='centered')
@@ -15,7 +16,7 @@ image = Image.open(BytesIO(requests.get(
 newsize = (300, 300)
 image = image.resize(newsize)
 
-#st.sidebar.image(image)
+st.sidebar.image(image)
 text = '<p style="font-family:sans-serif; color:Black; font-size: 16px;">' \
        '◉ Muhammad Azzubair bin Azeman </br>' \
        '◉ Gombak, Selangor</br>' \
@@ -27,7 +28,8 @@ st.sidebar.title('Navigation')
 page_names_to_func = {
     'Introduction': intro,
     'Family Graph': family_graph,
-    'Computer Vision': detect_labels
+    'Personal': transform_sap_data,
+    # 'Computer Vision': detect_object
 }
 
 project_select = st.sidebar.radio('Select project to display:', (list(page_names_to_func.keys())))
