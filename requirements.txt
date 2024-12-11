@@ -14,3 +14,4 @@ transformers
 torch
 torchvision
 seaborn
+timm==1.0.12
