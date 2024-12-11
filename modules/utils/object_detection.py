@@ -82,7 +82,11 @@ class DetrObjectDetection:
             labels = result["labels"][keep].tolist()
 
             for score, (xmin, ymin, xmax, ymax), label in zip(scores, boxes, labels):
-                class_name = self.COCO_CLASSES[label]
+                id2label = self.model.config.id2label
+
+                # Convert to a list of COCO classes
+                class_name = [id2label[i] for i in range(len(id2label))][label]
+
                 if label not in color_map:
                     color_map[label] = np.random.rand(3)
 
