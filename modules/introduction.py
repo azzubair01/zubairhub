@@ -1,7 +1,7 @@
 import streamlit as st
 
 
-st.fragment
+@st.fragment
 def intro():
 
 
@@ -14,7 +14,7 @@ def intro():
     st.write('## About Me')
     text = '<p style="font-family:sans-serif; color:Black; font-size: 18px;">' \
            '◉ A <span style="font-weight:bold; color:MediumBlue;"> Data Scientist </span>' \
-           'with 3 years of experience in Business, and Artificial Intelligence </br>' \
+           'with 3 years of experience in Data Science and Analysis </br>' \
            '◉ A constant learner and a firm believer of experimentation over expertise </br> ' \
            '◉ Passionate on Data driven solutions which are easy, economical and scalable'
     st.markdown(text, unsafe_allow_html=True)
@@ -39,6 +39,5 @@ def intro():
         '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp c) Provide Artificial Intelligence modules for DataMicron EagleEye</br>' \
         '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp d) Visualise Business Intelligence dashboards using DataMicron InstaBI</br>'
     st.markdown(text, unsafe_allow_html=True)
-    st.write("---")
 
-    st.write("---")
+    st.divider()
