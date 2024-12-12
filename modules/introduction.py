@@ -14,7 +14,7 @@ def intro():
     st.write('## About Me')
     text = '<p style="font-family:sans-serif; color:Black; font-size: 18px;">' \
            '◉ A <span style="font-weight:bold; color:MediumBlue;"> Data Scientist </span>' \
-           'with 3 years of experience in Data Science and Analysis </br>' \
+           'with 4 years of experience in Data Science and Analysis </br>' \
            '◉ A constant learner and a firm believer of experimentation over expertise </br> ' \
            '◉ Passionate on Data driven solutions which are easy, economical and scalable'
     st.markdown(text, unsafe_allow_html=True)
@@ -27,10 +27,11 @@ def intro():
 
     text = '<p style="font-family:sans-serif; color:Black; font-size: 18px;">' \
         '◉ <span style="font-weight:bold; color:MediumBlue;">Data Scientist II</span> (Sept 2021 - Present) - <b><i>Asia Digital Engineering Sdn Bhd</i></b></br>' \
-        '&nbsp&nbsp&nbsp - <i>Provide Digital Innovation Services (Big Data) for AirAsia departments</i></br>' \
+        '&nbsp&nbsp&nbsp - <i>Provide Digital Innovation Services for AirAsia departments</i></br>' \
         '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a) Provide data services for inter and intra-departments</br>' \
-        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp b) Build backend engines for data processing using Python on PyCharm</br>' \
-        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp c) Visualise data on Streamlit web application</br>' \
+        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp b) Build data pipeline for data extraction, transformation and load</br>' \
+        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp c) Deliver data analysis and insights on aviation engineering operations</br>' \
+        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp d) Implement Artificial Intelligence solutions for Aviation Digitalisation</br>' \
         '<p style="font-family:sans-serif; color:Black; font-size: 18px;">' \
         '◉ <span style="font-weight:bold; color:MediumBlue;">Junior Data Scientist</span> (July 2020 - Sept 2021) - <b><i>DataMicron Systems Sdn Bhd</i></b></br> ' \
         '&nbsp&nbsp&nbsp - <i>Deliver Big Data consultation services through POCs</i></br>' \
