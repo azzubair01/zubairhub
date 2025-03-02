@@ -63,7 +63,7 @@ def parse_document():
                 st.text_area("Extracted Text:", extracted_text['extracted_text'], height=400)
 
             extracted_table = pdf_extractor.extract_tables(page_num)
-            st.write(extracted_table)
+
             if not pd.DataFrame(extracted_table['extracted_text']).empty:
                 st.info(f'Table detected on page {page_num}')
                 # extracted_table_df = pd.DataFrame(extracted_table['extracted_text'])
