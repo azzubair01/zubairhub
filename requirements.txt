@@ -10,10 +10,10 @@ pyautogui==0.9.53
 numpy==1.26.4
 plotly==5.23.0
 xlsxwriter==3.2.0
-transformers
-torch
-torchvision
-seaborn
+transformers==4.47.0
+torch==2.5.1
+torchvision==0.20.1
+seaborn==0.13.2
 timm==1.0.12
 opencv-python==4.11.0.86
 pytesseract==0.3.13
