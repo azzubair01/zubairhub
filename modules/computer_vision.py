@@ -64,7 +64,7 @@ def detect_object():
             st.warning("No objects detected.")
 
 
-def recognise_text():
+def extract_text():
     text = None
     uploaded_file = None
 
@@ -111,7 +111,7 @@ def recognise_text():
             st.error("No file uploaded yet.")
         else:
             try:
-                temp_file = NamedTemporaryFile(delete=False, suffix=".png")
+                temp_file = NamedTemporaryFile(delete=False, suffix=uploaded_file.name.split('.')[-1])
                 temp_file.write(uploaded_file.getbuffer())
                 temp_file.close()
                 uploaded_file = temp_file.name
