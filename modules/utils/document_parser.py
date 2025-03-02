@@ -22,24 +22,20 @@ class OCRProcessor:
         """Extracts text from an image using OCR."""
         image = self.preprocess_image(image_path)
 
-        if self.use_easyocr:
-            results = self.reader.readtext(image)
-            return " ".join([text[1] for text in results])
-        else:
-            config_map ={
-                'OSD': '--psm 0',
-                'Auto segmentation + OSD': '--psm 1',
-                'Auto segmentation - OSD/OCR': '--psm 2',
-                'Auto segmentation + OCR': '--psm 3',
-                'Single Column Multi-size Text': '--psm 4',
-                'Vertical Text': '--psm 5',
-                'Text Block': '--psm 6',
-                'Single Line': '--psm 7',
-                'Single Word': '--psm 8',
-                'Single Word in Circle': '--psm 9',
-                'Single Character': '--psm 10',
-                'Sparse Text': '--psm 11',
-                'Sparse Text + OSD': '--psm 12',
-                'Raw Line': '--psm 13',
-            }
-            return pytesseract.image_to_string(image, lang=self.lang, config=config_map[config])
+        config_map ={
+            'OSD': '--psm 0',
+            'Auto segmentation + OSD': '--psm 1',
+            'Auto segmentation - OSD/OCR': '--psm 2',
+            'Auto segmentation + OCR': '--psm 3',
+            'Single Column Multi-size Text': '--psm 4',
+            'Vertical Text': '--psm 5',
+            'Text Block': '--psm 6',
+            'Single Line': '--psm 7',
+            'Single Word': '--psm 8',
+            'Single Word in Circle': '--psm 9',
+            'Single Character': '--psm 10',
+            'Sparse Text': '--psm 11',
+            'Sparse Text + OSD': '--psm 12',
+            'Raw Line': '--psm 13',
+        }
+        return pytesseract.image_to_string(image, lang=self.lang, config=config_map[config])
