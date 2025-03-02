@@ -98,7 +98,7 @@ def recognise_text():
         ]
         config_option = st.selectbox(label='Select OCR config', options=config_option_list)
 
-    ocr = OCRProcessor(use_easyocr=False)
+    ocr = OCRProcessor()
 
     if image_option == 'Upload':
         if uploaded_file is None:
