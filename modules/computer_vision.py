@@ -68,7 +68,7 @@ def recognise_text():
     text = None
     uploaded_file = None
 
-    col1, col2 = st.columns(2)
+    col1, col2, col3 = st.columns(3)
     with col1:
         image_option = st.radio(label='Select image option:', options=('Example', 'Upload'), key='Radio button for image option', horizontal=True)
 
@@ -77,7 +77,7 @@ def recognise_text():
 
     elif image_option == 'Example':
         example_image_list = os.listdir('modules/ocr_data')
-        selected_image = st.selectbox(label='Select Example image', options=example_image_list)
+        selected_image = st.selectbox(label='Select Example image', options=example_image_list, key='Selectbox for image option')
         uploaded_file = f'modules/ocr_data/{selected_image}'
 
 
@@ -98,7 +98,13 @@ def recognise_text():
         ]
         config_option = st.selectbox(label='Select OCR config', options=config_option_list)
 
-    ocr = OCRProcessor()
+
+    with col3:
+        lang_list = ['eng', 'equ', 'msa', 'ara']
+        selected_lang = st.multiselect(label='Select Language', default='eng', options=lang_list, key='Selectbox for language option')
+        selected_lang = '+'.join(selected_lang) if selected_lang else ''
+
+    ocr = OCRProcessor(lang=selected_lang)
 
     if image_option == 'Upload':
         if uploaded_file is None:
