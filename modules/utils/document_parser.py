@@ -1,19 +1,16 @@
-
-import easyocr
 import cv2
 import pytesseract
 
 
 class OCRProcessor:
-    def __init__(self, use_easyocr=False, lang='eng'):
+    def __init__(self, lang='eng'):
         """
         Initializes the OCR Processor.
-        :param use_easyocr: If True, uses EasyOCR instead of Tesseract.
         :param lang: Language for OCR (default is English).
         """
-        self.use_easyocr = use_easyocr
+
         self.lang = lang
-        self.reader = easyocr.Reader([lang]) if use_easyocr else None
+
 
     def preprocess_image(self, image_path):
         """Preprocess image to enhance OCR accuracy."""
