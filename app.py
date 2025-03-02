@@ -11,7 +11,7 @@ import streamlit as st
 from modules.social_graph import family_graph
 from modules.introduction import intro
 from modules.personal import transform_sap_data
-from modules.computer_vision import detect_object
+from modules.computer_vision import detect_object, recognise_text
 
 
 st.sidebar.title('Navigation')
@@ -19,6 +19,7 @@ page_names_to_func = {
     'Introduction': intro,
     'Family Graph': family_graph,
     'Object Detection': detect_object,
+    'Optical Character Recognition':  recognise_text,
     'Personal': transform_sap_data,
 
 }
