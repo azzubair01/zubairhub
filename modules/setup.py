@@ -20,8 +20,6 @@ def initialise_page(
         }
     )
 
-    st.sidebar.title('My Profile')
-
     style_image = """
         width: auto;
         max-width: 150px;

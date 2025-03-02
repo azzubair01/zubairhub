@@ -2,10 +2,10 @@ import io
 import torch
 import logging
 import numpy as np
+from PIL import Image
 from matplotlib import pyplot as plt
 from transformers import DetrImageProcessor, DetrForObjectDetection
-from PIL import Image
-import streamlit as st
+
 
 # Suppress unnecessary warnings
 logging.getLogger("transformers.modeling_utils").setLevel(logging.ERROR)

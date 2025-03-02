@@ -5,7 +5,7 @@ from io import BytesIO
 from tempfile import NamedTemporaryFile
 
 from modules.utils.object_detection import DetrObjectDetection
-from modules.utils.document_parser import OCRProcessor
+from modules.utils.text_recognition import OCRExtractor
 
 detector = DetrObjectDetection()
 
@@ -104,7 +104,7 @@ def extract_text():
         selected_lang = st.multiselect(label='Select Language', default='eng', options=lang_list, key='Selectbox for language option')
         selected_lang = '+'.join(selected_lang) if selected_lang else ''
 
-    ocr = OCRProcessor(lang=selected_lang)
+    ocr = OCRExtractor(lang=selected_lang)
 
     if image_option == 'Upload':
         if uploaded_file is None:
