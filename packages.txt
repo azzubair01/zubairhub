@@ -7,4 +7,3 @@ libtesseract4
 tesseract-ocr-eng
 tesseract-ocr-msa
 tesseract-ocr-ara
-tesseract-ocr-equ
