@@ -7,7 +7,7 @@ import pandas as pd
 import streamlit as st
 from matplotlib import pyplot as plt
 
-pytesseract.pytesseract.tesseract_cmd = 'tesseract'
+pytesseract.pytesseract.tesseract_cmd = '/usr/bin/tesseract'
 
 class OCRProcessor:
     def __init__(self, use_easyocr=False, lang='eng'):
