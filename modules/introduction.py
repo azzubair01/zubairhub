@@ -28,14 +28,14 @@ def intro():
     text = '<p style="font-family:sans-serif; color:Black; font-size: 18px;">' \
         '◉ <span style="font-weight:bold; color:MediumBlue;">Data Scientist II</span> (Sept 2021 - Present) - <b><i>Asia Digital Engineering Sdn Bhd</i></b></br>' \
         '&nbsp&nbsp&nbsp - <i>Provide Digital Innovation Services for AirAsia departments</i></br>' \
-        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a) Provide data services for inter and intra-departments</br>' \
-        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp b) Build data pipeline for data extraction, transformation and load</br>' \
-        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp c) Deliver data analysis and insights on aviation engineering operations</br>' \
+        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a) Provide od_data services for inter and intra-departments</br>' \
+        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp b) Build od_data pipeline for od_data extraction, transformation and load</br>' \
+        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp c) Deliver od_data analysis and insights on aviation engineering operations</br>' \
         '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp d) Implement Artificial Intelligence solutions for Aviation Digitalisation</br>' \
         '<p style="font-family:sans-serif; color:Black; font-size: 18px;">' \
         '◉ <span style="font-weight:bold; color:MediumBlue;">Junior Data Scientist</span> (July 2020 - Sept 2021) - <b><i>DataMicron Systems Sdn Bhd</i></b></br> ' \
         '&nbsp&nbsp&nbsp - <i>Deliver Big Data consultation services through POCs</i></br>' \
-        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a) Transform and process data using EzData and Python</br>' \
+        '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp a) Transform and process od_data using EzData and Python</br>' \
         '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp b) Perform prediction and forecasting using DataMicron Foresight</br>' \
         '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp c) Provide Artificial Intelligence modules for DataMicron EagleEye</br>' \
         '&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp d) Visualise Business Intelligence dashboards using DataMicron InstaBI</br>'

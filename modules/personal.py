@@ -21,7 +21,7 @@ def generate_download_button(dataframe, filename):
 
 @st.fragment
 def transform_sap_data():
-    uploaded_file = st.file_uploader(label='Upload SAP data', key='Upload button for sap data')
+    uploaded_file = st.file_uploader(label='Upload SAP od_data', key='Upload button for sap od_data')
 
     if uploaded_file:
         df_raw = pd.read_excel(uploaded_file, sheet_name='Sheet1')

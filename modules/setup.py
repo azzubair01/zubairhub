@@ -40,8 +40,8 @@ def initialise_page(
     )
 
     text = '<p style="font-family:sans-serif; color:Black; font-size: 16px;">' \
-           '◉ Muhammad Azzubair bin Azeman </br>' \
-           '◉ Gombak, Selangor</br>' \
+           '◉ Muhammad Azzubair Azeman </br>' \
+           '◉ Cheras, Selangor</br>' \
            '◉ azzubairazeman@gmail.com'
     st.sidebar.markdown(text, unsafe_allow_html=True)
 
