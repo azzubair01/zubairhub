@@ -1,7 +1,7 @@
 # ZubairHub
 
 ## Overview
-ZubairHub is a Streamlit-based application that integrates various functionalities, including social graph visualization, object detection, document parsing, text extraction, and SAP data transformation. The application provides an intuitive interface with a sidebar navigation menu to select and interact with different features.
+ZubairHub is a Streamlit-based application that integrates various functionalities, including social graph visualization, object detection, document parsing, text extraction, generative AI interaction, and personal data transformation. The application provides an intuitive interface with a sidebar navigation menu to select and interact with different features.
 
 ## Features
 - **📌 Introduction**: Overview of the web app and its purpose.
@@ -9,7 +9,8 @@ ZubairHub is a Streamlit-based application that integrates various functionaliti
 - **📷 Object Detection**: Detect objects in images using computer vision.
 - **📄 Document Parsing**: Extract and analyze structured data from documents.
 - **🔍 Text Extraction**: Extract text from images or scanned documents.
-- **💼 Personal (SAP Data Transformation)**: Process and transform SAP-related data.
+- **🔮 Generative AI**: Ask anything to Gemini using text and optionally can include image.
+- **💼 Personal Data Transformation**: Process and transform personal data.
 
 ## Installation
 To run this application locally, follow these steps:
@@ -35,6 +36,7 @@ This project relies on the following Python libraries:
 - `opencv-python` (for object detection)
 - `pytesseract` (for text extraction)
 - `lxml` (for document parsing)
+- `google-genai` (for interacting with Gemini)
 
 ## Contributing
 Contributions are welcome! Feel free to submit issues or create pull requests to improve the app.
