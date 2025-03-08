@@ -15,16 +15,14 @@ from modules.computer_vision import detect_object, extract_text
 from modules.natural_language import parse_document
 
 
-
 st.sidebar.title('Navigation')
 page_names_to_func = {
-    'Introduction': intro,
-    'Family Graph': family_graph,
-    'Object Detection': detect_object,
-    'Document Parsing': parse_document,
-    'Text Extraction':  extract_text,
-    'Personal': transform_sap_data,
-
+    '📌 Introduction': intro,
+    '👨‍👩‍👧‍👦 Family Graph': family_graph,
+    '📷 Object Detection': detect_object,
+    '📄 Document Parsing': parse_document,
+    '🔍 Text Extraction': extract_text,
+    '💼 Personal': transform_sap_data,
 }
 
 project_select = st.sidebar.radio('Select project to display:', (list(page_names_to_func.keys())))
