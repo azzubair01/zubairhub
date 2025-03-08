@@ -15,36 +15,56 @@ def initialise_page(
         menu_items={
             'Get Help': 'https://www.extremelycoolapp.com/help',
             'Report a bug': "https://www.extremelycoolapp.com/bug",
-            'About': "This app is created to extract task listings that are absent in the current shared folder."
+            'About': "This app is designed to extract task listings missing from the shared folder."
         }
     )
 
-    # Style for profile image
-    style_image = """
-        width: auto;
-        max-width: 130px;
-        height: auto;
-        max-height: 500px;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        border-radius: 50%;
-        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    """
-
-    # Sidebar profile image
-    st.sidebar.markdown(
-        f'<img src="{"https://avatars.githubusercontent.com/u/52235533?s=400&u=933b82feeb4ec3f9278f6b66cf02d9d5ad351a72&v=4"}" style="{style_image}">',
-        unsafe_allow_html=True,
-    )
-
-    # Sidebar profile info
+    # Sidebar Profile Card
     st.sidebar.markdown(
         """
-        <div style="text-align: left; font-family: Arial, sans-serif;">
-            <h3>👤 Muhammad Azzubair Azeman</h3>
-            <p>📍 Cheras, Selangor</p>
-            <p>📧 <a href="mailto:azzubairazeman@gmail.com" style="color: #0072B1; text-decoration: none;">azzubairazeman@gmail.com</a></p>
+        <style>
+            .profile-card {
+                text-align: left;
+                padding: 15px;
+                border-radius: 12px;
+                background: #f8f9fa;
+                box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
+                font-family: Arial, sans-serif;
+            }
+            .profile-img-container {
+                text-align: center;
+                margin-bottom: 10px;
+            }
+            .profile-img {
+                width: 120px;
+                height: 120px;
+                border-radius: 50%;
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            }
+            .profile-name {
+                font-size: 16px;
+                font-weight: bold;
+                color: #333;
+            }
+            .profile-info {
+                font-size: 16px;
+                color: #555;
+                margin: 5px 0;
+            }
+            .email-link {
+                color: #0072B1;
+                text-decoration: none;
+                font-weight: bold;
+            }
+        </style>
+
+        <div class="profile-card">
+            <div class="profile-img-container">
+                <img src="https://avatars.githubusercontent.com/u/52235533?s=400&u=933b82feeb4ec3f9278f6b66cf02d9d5ad351a72&v=4" class="profile-img">
+            </div>
+            <div class="profile-name">👤 Muhammad Azzubair Azeman</div>
+            <div class="profile-info">📍 Cheras, Selangor</div>
+            <div class="profile-info">📧 <a href="mailto:azzubairazeman@gmail.com" class="email-link">azzubairazeman@gmail.com</a></div>
         </div>
         """,
         unsafe_allow_html=True
