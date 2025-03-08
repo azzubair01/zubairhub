@@ -1,7 +1,7 @@
-# Azzubair's Webapp
+# ZubairHub
 
 ## Overview
-Azzubair's Webapp is a Streamlit-based application that integrates various functionalities, including social graph visualization, object detection, document parsing, text extraction, and SAP data transformation. The application provides an intuitive interface with a sidebar navigation menu to select and interact with different features.
+ZubairHub is a Streamlit-based application that integrates various functionalities, including social graph visualization, object detection, document parsing, text extraction, and SAP data transformation. The application provides an intuitive interface with a sidebar navigation menu to select and interact with different features.
 
 ## Features
 - **📌 Introduction**: Overview of the web app and its purpose.
