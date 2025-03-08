@@ -13,7 +13,7 @@ from bokeh.models.tools import TapTool, PanTool, WheelZoomTool, SaveTool, ResetT
 
 @st.fragment
 def family_graph():
-    text = "<h1 style='text-align: center; color: black;'>\
+    text = "<h1 style='text-align: center; color: var(--text-color);'>\
                   👨‍👩‍👧‍👦 Azzubair's Family Graph!</h1>"
 
     st.markdown(text, unsafe_allow_html=True)

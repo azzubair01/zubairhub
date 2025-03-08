@@ -10,6 +10,7 @@ from modules.utils.text_recognition import OCRExtractor
 detector = DetrObjectDetection()
 
 def detect_object():
+    st.title("Let's detect objects 📷")
     option = st.radio(label='Select image option:', options=('Example', 'Upload'), key='Radio button for object detection option', horizontal=True)
     if option == 'Upload':
         # Streamlit file uploader for image input
@@ -65,6 +66,8 @@ def detect_object():
 
 
 def extract_text():
+    st.title("Let's extract text 🔍")
+
     text = None
     uploaded_file = None
 
@@ -129,7 +132,7 @@ def extract_text():
     with st.spinner("Running ocr..."):
         if uploaded_file is not None:
             img = Image.open(uploaded_file)
-            with st.expander(label='Preview image:', expanded=False):
+            with st.expander(label='Preview image:', expanded=True):
                 st.image(img)
             if text:
                 st.info(f"Detected text: \n\n{text}")

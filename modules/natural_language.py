@@ -7,6 +7,8 @@ from modules.utils.document_parser import PDFExtractor
 
 
 def parse_document():
+    st.title("Let's parse documents 📄")
+
     # Select input option
     option = st.radio(
         label='Select input option:',

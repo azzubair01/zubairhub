@@ -19,3 +19,5 @@ opencv-python==4.11.0.86
 pytesseract==0.3.13
 streamlit-pdf-viewer==0.0.21
 pymupdf==1.25.3
+google-genai==1.5.0
+python-dotenv==1.0.1

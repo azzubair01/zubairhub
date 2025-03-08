@@ -13,6 +13,7 @@ from modules.introduction import intro
 from modules.personal import transform_sap_data
 from modules.computer_vision import detect_object, extract_text
 from modules.natural_language import parse_document
+from modules.artificial_intelligence import generative_ai
 
 
 st.sidebar.title('Navigation')
@@ -22,6 +23,7 @@ page_names_to_func = {
     '📷 Object Detection': detect_object,
     '📄 Document Parsing': parse_document,
     '🔍 Text Extraction': extract_text,
+    '🔮 Generative AI': generative_ai,
     '💼 Personal': transform_sap_data,
 }
 
