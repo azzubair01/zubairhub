@@ -15,6 +15,7 @@ from modules.computer_vision import detect_object, extract_text
 from modules.natural_language import parse_document
 from modules.artificial_intelligence import generative_ai
 from modules.weather_forecast import weather_forecast
+from modules.fuel_price import fuel_price
 
 
 st.sidebar.title('Navigation')
@@ -26,6 +27,7 @@ page_names_to_func = {
     '🔍 Text Extraction': extract_text,
     '🔮 Generative AI': generative_ai,
     '🌥️ Weather Forecast': weather_forecast,
+    '⛽ Fuel Price': fuel_price,
     '💼 Personal': transform_sap_data,
 }
 
