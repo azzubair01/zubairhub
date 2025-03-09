@@ -9,10 +9,11 @@ def generative_ai():
     st.write("Input text and optionally upload an image.")
 
     # Text Input
-    user_text = st.text_area("Enter your prompt:", key='Text area for ai prompt', value="Describe this image.")
+    user_text = st.text_area("Enter your prompt:", key='Text area for ai prompt', value="What is AI?")
 
-    # Image Input (Optional)
-    uploaded_image = st.file_uploader("Upload an image (optional):", type=["png", "jpg", "jpeg"])
+    with st.expander(label='Upload image', icon='🖼️'):
+        # Image Input (Optional)
+        uploaded_image = st.file_uploader("Upload an image (optional):", type=["png", "jpg", "jpeg"])
 
     # Process Image
     image = None

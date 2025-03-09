@@ -24,53 +24,56 @@ def initialise_page(
         """
         <style>
             .profile-card {
-                text-align: left;
-                padding: 15px;
+                text-align: center;
+                padding: 20px;
                 border-radius: 12px;
                 background: #f8f9fa;
-                box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.15);
-                font-family: Arial, sans-serif;
-            }
-            .profile-img-container {
-                text-align: center;
-                margin-bottom: 10px;
+                box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+                font-family: 'Arial', sans-serif;
             }
             .profile-img {
-                width: 120px;
-                height: 120px;
+                width: 110px;
+                height: 110px;
                 border-radius: 50%;
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+                margin-bottom: 10px;
             }
             .profile-name {
-                font-size: 16px;
+                font-size: 18px;
                 font-weight: bold;
-                color: #333;
+                color: #222;
+                margin-bottom: 5px;
             }
             .profile-info {
-                font-size: 16px;
+                font-size: 15px;
                 color: #555;
-                margin: 5px 0;
+                margin: 4px 0;
             }
-            .email-link {
+            .profile-links a {
                 color: #0072B1;
                 text-decoration: none;
                 font-weight: bold;
             }
+            .profile-links a:hover {
+                text-decoration: underline;
+            }
         </style>
 
         <div class="profile-card">
-            <div class="profile-img-container">
-                <img src="https://avatars.githubusercontent.com/u/52235533?s=400&u=933b82feeb4ec3f9278f6b66cf02d9d5ad351a72&v=4" class="profile-img">
-            </div>
-            <div class="profile-name">👤 Muhammad Azzubair Azeman</div>
+            <img src="https://avatars.githubusercontent.com/u/52235533?s=400&u=933b82feeb4ec3f9278f6b66cf02d9d5ad351a72&v=4" class="profile-img">
+            <div class="profile-name">👤 Azzubair Azeman</div>
             <div class="profile-info">📍 Cheras, Selangor</div>
-            <div class="profile-info">📧 <a href="mailto:azzubairazeman@gmail.com" class="email-link">azzubairazeman@gmail.com</a></div>
+            <div class="profile-info">📧 <a href="mailto:azzubairazeman@gmail.com" class="profile-links">azzubairazeman@gmail.com</a></div>
+            <div class="profile-info profile-links">
+                🔗 <a href="https://github.com/azzubair01" target="_blank">GitHub</a> | 
+                🔗 <a href="https://www.linkedin.com/in/azzubair-azeman-b96222142/" target="_blank">LinkedIn</a>
+            </div>
         </div>
         """,
         unsafe_allow_html=True
     )
 
-    st.sidebar.write("---")
+    st.sidebar.divider()
 
 
 def reset_session(soft=False):
