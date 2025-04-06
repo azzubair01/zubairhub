@@ -11,7 +11,7 @@ import streamlit as st
 from modules.social_graph import family_graph
 from modules.introduction import intro
 from modules.personal import transform_sap_data
-from modules.computer_vision import detect_object, extract_text
+# from modules.computer_vision import detect_object, extract_text
 from modules.natural_language import parse_document
 from modules.artificial_intelligence import generative_ai
 from modules.weather_forecast import weather_forecast
@@ -22,9 +22,9 @@ st.sidebar.title('Navigation')
 page_names_to_func = {
     '📌 Introduction': intro,
     '👨‍👩‍👧‍👦 Family Graph': family_graph,
-    '📷 Object Detection': detect_object,
+    # '📷 Object Detection': detect_object,
     '📄 Document Parsing': parse_document,
-    '🔍 Text Extraction': extract_text,
+    # '🔍 Text Extraction': extract_text,
     '🔮 Generative AI': generative_ai,
     '🌥️ Weather Forecast': weather_forecast,
     '⛽ Fuel Price': fuel_price,
