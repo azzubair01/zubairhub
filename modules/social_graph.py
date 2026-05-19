@@ -3,23 +3,22 @@ import pandas as pd
 import streamlit as st
 from st_aggrid.grid_options_builder import GridOptionsBuilder
 from st_aggrid import AgGrid, GridUpdateMode
-from bokeh.plotting import Figure, from_networkx
-from bokeh.palettes import Spectral4
-from bokeh.layouts import gridplot
-from bokeh.models import ColumnDataSource, LabelSet, BoxSelectTool, Circle, HoverTool, MultiLine, NodesAndLinkedEdges, \
-    Range1d
-from bokeh.models.tools import TapTool, PanTool, WheelZoomTool, SaveTool, ResetTool
+import plotly.graph_objects as go
+import plotly.express as px
 
 
-@st.fragment
-def family_graph():
-    text = "<h1 style='text-align: center; color: var(--text-color);'>\
+def _display_header():
+    text = "<h1 style='text-align: center; color: var(--text-color);'> \
                   👨‍👩‍👧‍👦 Azzubair's Family Graph!</h1>"
-
     st.markdown(text, unsafe_allow_html=True)
     st.write("---")
-    family_df = pd.read_excel('modules/azzubair_family.xlsx')
 
+
+def _get_family_data():
+    return pd.read_excel('modules/azzubair_family.xlsx')
+
+
+def _render_input_form(family_df):
     col1, col2, col3 = st.columns(3)
 
     with col1:
@@ -41,7 +40,10 @@ def family_graph():
         family_df = family_df.append(
             pd.DataFrame({'Name': name, 'Parent': parent, 'Relationship': relationship}, index=[index]))
         family_df.to_excel('modules/azzubair_family.xlsx', index=False)
+    return family_df
 
+
+def _render_aggrid_table(family_df):
     # Display in table
     gd = GridOptionsBuilder.from_dataframe(family_df)
     gd.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=10)
@@ -66,22 +68,23 @@ def family_graph():
         with col4:
             button_delete = st.button('Delete')
             if button_delete:
-                df_delete = family_df[~family_df.index.isin(sel_row_list)]
-                df_delete.to_excel('modules/azzubair_family.xlsx', index=False)
+                family_df = family_df[~family_df.index.isin(sel_row_list)]
+                family_df.to_excel('modules/azzubair_family.xlsx', index=False)
+    return family_df
 
+
+def _generate_and_display_graph(family_df):
     if not family_df.empty:
+        G = nx.from_pandas_edgelist(family_df, source='Parent', target='Name', create_using=nx.Graph())
+        # Generate the layout
+        pos = nx.spring_layout(G)
 
-        G = nx.from_pandas_edgelist(family_df, source='Name', target='Parent', edge_attr=True)
-
-        # Generate the layout and set the 'pos' attribute
-        pos = nx.drawing.layout.spring_layout(G)
-        nx.set_node_attributes(G, pos, 'pos')
-
+        # Extract node and edge information for Plotly
         edge_x = []
         edge_y = []
         for edge in G.edges():
-            x0, y0 = G.nodes[edge[0]]['pos']
-            x1, y1 = G.nodes[edge[1]]['pos']
+            x0, y0 = pos[edge[0]]
+            x1, y1 = pos[edge[1]]
             edge_x.append(x0)
             edge_x.append(x1)
             edge_x.append(None)
@@ -89,33 +92,81 @@ def family_graph():
             edge_y.append(y1)
             edge_y.append(None)
 
-        graph_renderer = from_networkx(G, layout_function=nx.spring_layout)
-        plot = Figure(height=550, width=600, tools="pan,wheel_zoom,save,reset", active_scroll='wheel_zoom',
-                      x_range=Range1d(-1.1, 1.1), y_range=Range1d(-1.1, 1.1), title='')
-        plot.title.text = ""
-        graph_renderer.node_renderer.glyph = Circle(radius=0.01, fill_color=Spectral4[3])
-        graph_renderer.node_renderer.selection_glyph = Circle(radius=0.01, fill_color=Spectral4[2])
-        graph_renderer.node_renderer.hover_glyph = Circle(radius=0.01, fill_color=Spectral4[1])
-        graph_renderer.edge_renderer.glyph = MultiLine(line_color="lightblue", line_width="edge_width", )
-        graph_renderer.edge_renderer.selection_glyph = MultiLine(line_color=Spectral4[2], line_width="edge_width")
-        graph_renderer.edge_renderer.hover_glyph = MultiLine(line_color=Spectral4[1], line_width="edge_width")
-        graph_renderer.selection_policy = NodesAndLinkedEdges()
-        graph_renderer.inspection_policy = NodesAndLinkedEdges()
-        HOVER_TOOLTIPS = [("Item", "@index")]
-        plot.add_tools(HoverTool(tooltips=HOVER_TOOLTIPS), WheelZoomTool(), TapTool(), BoxSelectTool(), PanTool(),
-                       SaveTool(), ResetTool())
-        plot.renderers.append(graph_renderer)
-        x, y = zip(*graph_renderer.layout_provider.graph_layout.values())
-        node_labels = list(graph_renderer.layout_provider.graph_layout.keys())
-        source = ColumnDataSource({'x': x, 'y': y,
-                                   'item': [node_labels[i] for i in range(len(x))]})
-        labels = LabelSet(x='x', y='y', text='item', source=source,
-                          background_fill_color='white', text_font_size='10px')
-        plot.renderers.append(labels)
-        # plot.outline_line_color = None
-        # plot.xgrid.grid_line_color = None
-        # plot.ygrid.grid_line_color = None
-        # plot.axis.visible = False
-        #
-        # # Plot network graph
-        st.bokeh_chart(gridplot([[plot]], sizing_mode='stretch_width'), use_container_width=True)
+        edge_trace = go.Scatter(
+            x=edge_x, y=edge_y,
+            line=dict(width=0.5, color='#888'),
+            hoverinfo='none',
+            mode='lines')
+
+        node_x = []
+        node_y = []
+        node_text = []
+        node_colors = []
+
+        # Identify children of Azeman or Kartinah
+        azeman_kartinah_children = family_df[
+            (family_df['Parent'] == 'AZEMAN') | (family_df['Parent'] == 'KARTINAH')
+        ]['Name'].tolist()
+
+        # Identify Kartinah and her parents for pink coloring
+        kartinah_relatives_for_pink = []
+        if 'KARTINAH' in family_df['Name'].values:
+            kartinah_relatives_for_pink.append('KARTINAH')
+            # Check if Kartinah has a parent in the dataframe
+            kartinah_parents = family_df[family_df['Name'] == 'KARTINAH']['Parent'].tolist()
+            if kartinah_parents:
+                kartinah_relatives_for_pink.extend(kartinah_parents)
+
+
+        for node in G.nodes():
+            x, y = pos[node]
+            node_x.append(x)
+            node_y.append(y)
+            node_text.append(node)
+            # Assign color based on whether the node is a child of Azeman or Kartinah
+            if node in azeman_kartinah_children:
+                node_colors.append('green')
+            elif node in kartinah_relatives_for_pink:
+                node_colors.append('pink')
+            else:
+                node_colors.append('#888') # Default color
+
+        node_trace = go.Scatter(
+            x=node_x, y=node_y,
+            mode='markers+text',
+            hoverinfo='text',
+            marker=dict(
+                showscale=False,
+                size=10,
+                color=node_colors, # Use the list of colors
+                line_width=2),
+            text=node_text,
+            textposition="top center"
+        )
+
+        fig = go.Figure(data=[edge_trace, node_trace],
+                        layout=go.Layout(
+                            titlefont_size=16,
+                            showlegend=False,
+                            hovermode='closest',
+                            margin=dict(b=20, l=5, r=5, t=40),
+                            annotations=[dict(
+                                text="",
+                                showarrow=False,
+                                xref="paper", yref="paper",
+                                x=0.005, y=-0.002)],
+                            xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
+                            yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
+                        )
+
+        fig.update_layout(height=550, width=600)
+        st.plotly_chart(fig, width='stretch')
+
+
+@st.fragment
+def family_graph():
+    _display_header()
+    family_df = _get_family_data()
+    family_df = _render_input_form(family_df)
+    family_df = _render_aggrid_table(family_df)
+    _generate_and_display_graph(family_df)

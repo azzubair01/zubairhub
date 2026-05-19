@@ -72,7 +72,7 @@ def fuel_price():
         st.subheader("📊 Fuel Price Data")
         st.dataframe(
             data=filtered_df.drop(['diesel_eastmsia', 'series_type'], axis=1).sort_values(by='date', ascending=False),
-            use_container_width=True,
+            width='stretch',
             column_config={
                 'date': st.column_config.DateColumn()
             },
