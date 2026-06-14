@@ -8,10 +8,7 @@ import plotly.express as px
 
 # Weather condition to image mapping
 WEATHER_IMAGES = {
-    "Hujan di beberapa tempat": "images/rainy.jpg",
-    "Tiada hujan": "images/sunny.jpg",
-    "Ribut petir di beberapa tempat": "images/storm.jpg",
-    "default": "images/default.jpg"
+    "default": None
 }
 
 API_BASE_URL = 'https://api.data.gov.my/weather/forecast'
@@ -33,7 +30,8 @@ def fetch_weather_data(location):
 
 def get_weather_image(weather_status):
     """Return the appropriate weather image based on the forecast."""
-    return WEATHER_IMAGES.get(weather_status, WEATHER_IMAGES["default"])
+    # Since images are missing, returning None to avoid MediaFileStorageError
+    return None
 
 def weather_forecast():
     st.title("📊 Weather Forecast")
