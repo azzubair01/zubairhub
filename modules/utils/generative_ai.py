@@ -2,7 +2,7 @@ import json
 import os
 import hashlib
 import base64
-from google import genai
+import google.genai
 from google.genai.types import Content, Part  # Importing correct types
 from dotenv import load_dotenv
 import streamlit as st
@@ -20,7 +20,7 @@ os.makedirs(CACHE_DIR, exist_ok=True)
 
 # Initialize the Gemini API client once
 GENAI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-client = genai.Client(api_key=GENAI_API_KEY)
+client = google.genai.Client(api_key=GENAI_API_KEY)
 
 DEFAULT_MODEL = "gemini-3.5-flash"
 
