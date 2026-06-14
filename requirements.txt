@@ -20,5 +20,6 @@ pytesseract==0.3.13
 streamlit-pdf-viewer==0.0.21
 pymupdf==1.25.3
 
+google-genai==2.8.0
 python-dotenv==1.0.1
 watchdog
