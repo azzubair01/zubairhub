@@ -2,8 +2,6 @@ import networkx as nx
 import pandas as pd
 import streamlit as st
 import plotly.graph_objects as go
-from st_aggrid.grid_options_builder import GridOptionsBuilder
-from st_aggrid import AgGrid, GridUpdateMode
 
 @st.fragment
 def family_graph():
@@ -35,32 +33,24 @@ def family_graph():
         new_row = pd.DataFrame({'Name': name, 'Parent': parent, 'Relationship': relationship}, index=[index])
         family_df = pd.concat([family_df, new_row])
         family_df.to_excel('modules/azzubair_family.xlsx', index=False)
+        st.rerun()
 
     # Display in table
-    gd = GridOptionsBuilder.from_dataframe(family_df)
-    gd.configure_pagination(enabled=True, paginationAutoPageSize=False, paginationPageSize=10)
-    gd.configure_selection(selection_mode='multiple', use_checkbox=True)
-    gd.configure_default_column(editable=True, groupable=True, sorteable=True, filterable=True)
-    grid_options = gd.build()
-
-    grid_table = AgGrid(
+    edited_df = st.data_editor(
         family_df,
-        gridOptions=grid_options,
-        update_mode=GridUpdateMode.SELECTION_CHANGED,
-        fit_columns_on_grid_load=True,
-        theme="alpine")
+        num_rows="dynamic",
+        use_container_width=True,
+        column_config={
+            "Name": st.column_config.TextColumn("Name", required=True),
+            "Parent": st.column_config.TextColumn("Parent", required=True),
+            "Relationship": st.column_config.SelectboxColumn("Relationship", options=["Son", "Daughter"]),
+        },
+        key="family_editor"
+    )
 
-    sel_row_df = pd.DataFrame(grid_table["selected_rows"])
-
-    if not sel_row_df.empty:
-        # Assuming the structure of selected_rows based on previous code
-        sel_row_list = sel_row_df['_selectedRowNodeInfo'].apply(lambda x: x['nodeRowIndex']).tolist()
-        col1, col2, col3, col4, col5, col6, col7 = st.columns(7)
-        with col4:
-            button_delete = st.button('Delete')
-            if button_delete:
-                df_delete = family_df[~family_df.index.isin(sel_row_list)]
-                df_delete.to_excel('modules/azzubair_family.xlsx', index=False)
+    if not edited_df.equals(family_df):
+        edited_df.to_excel('modules/azzubair_family.xlsx', index=False)
+        st.rerun()
 
     if not family_df.empty:
 

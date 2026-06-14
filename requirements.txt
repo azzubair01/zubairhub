@@ -161,7 +161,6 @@ pandas==3.0.3
     # via
     #   seaborn
     #   streamlit
-    #   streamlit-aggrid
 pillow==12.2.0
     # via
     #   -r requirements.txt
@@ -212,8 +211,6 @@ python-dateutil==2.9.0.post0
     # via
     #   matplotlib
     #   pandas
-python-decouple==3.8
-    # via streamlit-aggrid
 python-dotenv==1.2.2
     # via -r requirements.txt
 python-multipart==0.0.32
@@ -265,10 +262,7 @@ starlette==1.3.0
 streamlit==1.58.0
     # via
     #   -r requirements.txt
-    #   streamlit-aggrid
     #   streamlit-pdf-viewer
-streamlit-aggrid==1.2.1.post2
-    # via -r requirements.txt
 streamlit-pdf-viewer==0.0.29
     # via -r requirements.txt
 sympy==1.14.0

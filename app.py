@@ -14,35 +14,6 @@ initialise_quotas()
 
 st.sidebar.title('Navigation')
 
-# Model Configuration with Quota Info
-st.sidebar.subheader("Model Configuration")
-MODELS = {
-    "Gemini 3.5 Flash": "gemini-3.5-flash",
-    "Gemini 2.0 Flash": "gemini-2.0-flash",
-    "Gemini 1.5 Flash": "gemini-1.5-flash",
-}
-selected_model_display = st.sidebar.selectbox(
-    "Select Model:",
-    options=list(MODELS.keys()),
-    index=0  # Default to 3.5 Flash
-)
-selected_model_id = MODELS[selected_model_display]
-st.session_state.selected_model = selected_model_id
-
-# Display Quota Left
-if 'quota_usage' in st.session_state and selected_model_id in st.session_state.quota_usage:
-    quota = st.session_state.quota_usage[selected_model_id]
-    total_rpd = 1500 # Default total RPD for Free Tier
-    percentage = (quota['RPD_left'] / total_rpd) * 100
-    st.sidebar.metric(
-        "Quota Left (RPD)", 
-        f"{quota['RPD_left']} / {total_rpd}", 
-        f"{percentage:.1f}%"
-    )
-    st.sidebar.caption("RPD = Requests Per Day (Free Tier estimate)")
-
-st.sidebar.markdown("---")
-
 def load_intro():
     from modules.introduction import intro
     return intro
@@ -97,6 +68,43 @@ page_names_to_func = {
 }
 
 project_select = st.sidebar.radio('Select project to display:', (list(page_names_to_func.keys())))
+
+st.sidebar.markdown("---")
+
+# Model Configuration with Quota Info - ONLY for Bank Statement Parser
+if project_select == '🏦 Bank Statement Parser':
+    st.sidebar.subheader("Model Configuration")
+    MODELS = {
+        "Gemini 3.5 Flash": "gemini-3.5-flash",
+        "Gemini 2.0 Flash": "gemini-2.0-flash",
+        "Gemini 1.5 Flash": "gemini-1.5-flash",
+    }
+    selected_model_display = st.sidebar.selectbox(
+        "Select Model:",
+        options=list(MODELS.keys()),
+        index=0  # Default to 3.5 Flash
+    )
+    selected_model_id = MODELS[selected_model_display]
+    st.session_state.selected_model = selected_model_id
+
+    # Display Quota Left
+    if 'quota_usage' in st.session_state and selected_model_id in st.session_state.quota_usage:
+        quota = st.session_state.quota_usage[selected_model_id]
+        total_rpd = 1500 # Default total RPD for Free Tier
+        percentage = (quota['RPD_left'] / total_rpd) * 100
+        st.sidebar.metric(
+            "Quota Left (RPD)", 
+            f"{quota['RPD_left']} / {total_rpd}", 
+            f"{percentage:.1f}%"
+        )
+        st.sidebar.caption("RPD = Requests Per Day (Free Tier estimate)")
+
+    st.sidebar.markdown("---")
+else:
+    # Ensure a default model is set for other modules that might use it
+    if 'selected_model' not in st.session_state:
+        st.session_state.selected_model = "gemini-3.5-flash"
+
 page_names_to_func[project_select]()
 
 
