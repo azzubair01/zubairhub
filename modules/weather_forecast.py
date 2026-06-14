@@ -6,22 +6,51 @@ import pandas as pd
 import streamlit as st
 import plotly.express as px
 
+# Weather condition to image mapping
+WEATHER_IMAGES = {
+    "Hujan di beberapa tempat": "images/rainy.jpg",
+    "Tiada hujan": "images/sunny.jpg",
+    "Ribut petir di beberapa tempat": "images/storm.jpg",
+    "default": "images/default.jpg"
+}
+
+API_BASE_URL = 'https://api.data.gov.my/weather/forecast'
+
+def fetch_weather_data(location):
+    """Fetch weather forecast data for the selected location."""
+    params = {
+        "filter": f"{location}@location__location_name",
+        "contains": "Ds@location__location_id"
+    }
+    try:
+        response = requests.get(API_BASE_URL, params=params)
+        response.raise_for_status()  # Raise an error for bad responses
+        data = response.json()
+        return data if isinstance(data, list) else []
+    except requests.RequestException as e:
+        logging.error(f"Failed to fetch weather data: {e}")
+        return []
+
+def get_weather_image(weather_status):
+    """Return the appropriate weather image based on the forecast."""
+    return WEATHER_IMAGES.get(weather_status, WEATHER_IMAGES["default"])
 
 def weather_forecast():
-    # Streamlit App Title
-    st.title(f"📊 Weather Forecast")
+    st.title("📊 Weather Forecast")
 
-    location_list = ['Alor Gajah', 'Asajaya', 'Bachok', 'Bagan Datuk', 'Baling',
+    # Select location
+    location_list = ['Kuala Lumpur', 'Kota Bharu', 'Jasin', 'Alor Gajah', 'Asajaya',
+                     'Bachok', 'Bagan Datuk', 'Baling',
                      'Bandar Baharu', 'Barat Daya', 'Batang Padang', 'Batu Pahat',
                      'Bau', 'Beaufort', 'Belaga', 'Beluran', 'Beluru', 'Bentong',
                      'Bera', 'Besut', 'Betong', 'Bintulu', 'Bukit Mabong', 'Dalat',
                      'Daro', 'Dungun', 'FP Labuan', 'Gombak', 'Gua Musang', 'Hilir Perak',
                      'Hulu Langat', 'Hulu Perak', 'Hulu Selangor', 'Hulu Terengganu',
-                     'Jasin', 'Jelebu', 'Jeli', 'Jempol', 'Jerantut', 'Johor Bahru',
+                     'Jelebu', 'Jeli', 'Jempol', 'Jerantut', 'Johor Bahru',
                      'Julau', 'Kabong', 'Kampar', 'Kanowit', 'Kapit', 'Kemaman', 'Keningau',
                      'Kerian', 'Kinabatangan', 'Kinta', 'Klang', 'Kluang', 'Kota Belud',
-                     'Kota Bharu', 'Kota Kinabalu', 'Kota Marudu', 'Kota Setar', 'Kota Tinggi',
-                     'Kuala Kangsar', 'Kuala Krai', 'Kuala Langat', 'Kuala Lumpur', 'Kuala Muda',
+                     'Kota Kinabalu', 'Kota Marudu', 'Kota Setar', 'Kota Tinggi',
+                     'Kuala Kangsar', 'Kuala Krai', 'Kuala Langat', 'Kuala Muda',
                      'Kuala Nerus', 'Kuala Penyu', 'Kuala Pilah', 'Kuala Selangor', 'Kuala Terengganu',
                      'Kuantan', 'Kubang Pasu', 'Kuching', 'Kudat', 'Kulai', 'Kulim', 'Kunak', 'Lahad Datu',
                      'Langkawi', 'Larut, Matang Dan Selama', 'Lawas', 'Limbang', 'Lipis', 'Lubok Antu',
@@ -36,58 +65,53 @@ def weather_forecast():
                      'Tambunan', 'Tampin', 'Tanah Merah', 'Tanah Tinggi Cameron', 'Tangkak', 'Tanjung Manis',
                      'Tatau', 'Tawau', 'Tebedu', 'Telang Usan', 'Telupid', 'Temerloh', 'Tenom', 'Timur Laut',
                      'Tongod', 'Tuaran', 'Tumpat', 'Yan']
-    location = st.selectbox(label='Select location', options=location_list, key='Select bos for location in weather forecast')
-    BASE_URL = 'https://api.data.gov.my/'
-    ENDPOINT = f'weather/forecast?filter={location}@location__location_name&contains=Ds@location__location_id'
-    FULL_URL = os.path.join(BASE_URL,ENDPOINT)
-    response = requests.get(FULL_URL)
+    location = st.selectbox('Select location', location_list)
 
-    weather_forecast = pd.DataFrame()
-    if response.status_code == 200:
-        weather_forecast = response.json()
-        logging.info(f'API Call Status: {response.status_code}')
-    else:
-        logging.error(f'API Call Status: {response.status_code}')
+    # Fetch weather data
+    weather_data = fetch_weather_data(location)
 
-    weather_forecast_df = pd.DataFrame(weather_forecast).sort_values(by='date')
-    weather_forecast_df["date"] = pd.to_datetime(weather_forecast_df["date"])  # Convert date column to datetime
+    # Get current weather status & display image
+    current_weather = weather_data[0].get("summary_forecast", "default") if weather_data else "default"
+    st.image(get_weather_image(current_weather), use_column_width=True)
 
-    # Plot Temperature Trends
-    fig_temp = px.line(weather_forecast_df, x="date", y=["min_temp", "max_temp"],
-                       title="📈 Temperature Trends",
-                       markers=True, labels={"value": "Temperature (°C)", "date": "Date"},
-                       color_discrete_map={"min_temp": "blue", "max_temp": "red"})
-    # Add vertical line
-    today_date = datetime.date.today().strftime('%Y-%m-%d')
-    vertical_line_date = pd.to_datetime(today_date)  # Change this to your desired date
-    fig_temp.add_vline(x=vertical_line_date, line_dash="dash", line_color="green")
+    # Process data for display
+    if weather_data:
+        df = pd.DataFrame(weather_data).sort_values(by='date')
+        df["date"] = pd.to_datetime(df["date"])
 
-    st.plotly_chart(fig_temp)
+        # Plot Temperature Trends
+        today_date = datetime.date.today().strftime('%Y-%m-%d')
+        fig_temp = px.line(df, x="date", y=["min_temp", "max_temp"],
+                           title="📈 Temperature Trends",
+                           markers=True, labels={"value": "Temperature (°C)", "date": "Date"},
+                           color_discrete_map={"min_temp": "blue", "max_temp": "red"})
+        fig_temp.add_vline(x=pd.to_datetime(today_date), line_dash="dash", line_color="green")
+        st.plotly_chart(fig_temp)
 
-    # Display Forecast Details in a Table
-    st.subheader("📅 Daily Forecast Details")
-    st.dataframe(
-        data=weather_forecast_df[["date", "morning_forecast", "afternoon_forecast", "night_forecast", "summary_when", "summary_forecast"]],
-        column_config={
-            'date': st.column_config.DateColumn()
-        },
-        hide_index=True,
-        width="stretch"
-    )
+        # Display Forecast Details in a Table
+        st.subheader("📅 Daily Forecast Details")
+        st.dataframe(
+            data=df[["date", "morning_forecast", "afternoon_forecast", "night_forecast", "summary_forecast"]],
+            column_config={
+                "date": st.column_config.DateColumn()
+            },
+            hide_index=True,
+            width='stretch'
+        )
 
-    # Footer
-    st.divider()
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown(f"""
-        <div style="text-align: left;">
-            🔄 <strong>Data last updated:</strong> {today_date}
-        </div>
-        """, unsafe_allow_html=True)
+        # Footer
+        st.divider()
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown(f"""
+            <div style="text-align: left;">
+                🔄 <strong>Data last updated:</strong> {today_date}
+            </div>
+            """, unsafe_allow_html=True)
 
-    with col2:
-        st.markdown("""
-        <div style="text-align: right;">
-            📡 <strong>Source:</strong> <a href="https://api.data.gov.my/weather/forecast" target="_blank">DOSM Open API</a>
-        </div>
-        """, unsafe_allow_html=True)
+        with col2:
+            st.markdown("""
+            <div style="text-align: right;">
+                📡 <strong>Source:</strong> <a href="https://api.data.gov.my/weather/forecast" target="_blank">DOSM Open API</a>
+            </div>
+            """, unsafe_allow_html=True)

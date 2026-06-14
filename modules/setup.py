@@ -63,7 +63,7 @@ def initialise_page(
             <img src="https://avatars.githubusercontent.com/u/52235533?s=400&u=933b82feeb4ec3f9278f6b66cf02d9d5ad351a72&v=4" class="profile-img">
             <div class="profile-name">👤 Azzubair Azeman</div>
             <div class="profile-info">📍 Cheras, Selangor</div>
-            <div class="profile-info">📧 <a href="mailto:azzubairazeman@gmail.com" class="profile-links">azzubairazeman@gmail.com</a></div>
+            <div class="profile-info"><a href="mailto:azzubairazeman@gmail.com" class="profile-links">azzubairazeman@gmail.com</a></div>
             <div class="profile-info profile-links">
                 🔗 <a href="https://github.com/azzubair01" target="_blank">GitHub</a> | 
                 🔗 <a href="https://www.linkedin.com/in/azzubair-azeman-b96222142/" target="_blank">LinkedIn</a>
