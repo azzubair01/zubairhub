@@ -1,29 +1,39 @@
 {
-  "name": "ZubairHub Dev Environment",
-  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bullseye",
-  "customizations": {
-    "vscode": {
-      "settings": {
-        "python.defaultInterpreterPath": "/usr/local/bin/python",
-        "python.linting.enabled": true
+       "name": "ZubairHub Dev Environment",
+       "image":
+      "mcr.microsoft.com/devcontainers/python:1-3.12-bullseye",
+       "customizations": {
+         "vscode": {
+           "settings": {
+             "python.defaultInterpreterPath":
+      "/usr/bin/python3.14",
+             "python.linting.enabled": true
+           },
+          "extensions": [
+            "ms-python.python",
+            "ms-python.vscode-pylance"
+          ]
+        }
       },
-      "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance"
+      "updateContentCommand": "sudo apt update && sudo apt
+      install -y software-properties-common && sudo
+      add-apt-repository -y ppa:deadsnakes/ppa && sudo apt
+      update && sudo apt install -y python3.14 python3.14-venv
+      python3.14-dev && pip install --upgrade pip uv && [ -f
+      packages.txt ] && sudo apt install -y $(cat packages.txt)
+      && uv venv --python 3.13 && source .venv/bin/activate &&
+      uv pip install -r requirements.txt",
+      "postAttachCommand": {
+        "init": "echo '✅ Dev Container Ready! Using Python
+      3.13.'"
+      },
+      "portsAttributes": {
+        "8501": {
+          "label": "Application",
+          "onAutoForward": "openPreview"
+        }
+      },
+      "forwardPorts": [
+        8501
       ]
     }
-  },
-  "updateContentCommand": "pip install --upgrade pip uv && [ -f packages.txt ] && sudo apt update && sudo apt install -y $(cat packages.txt) && uv pip install -r requirements.txt",
-  "postAttachCommand": {
-    "init": "echo '✅ Dev Container Ready! Use `uv pip install ...` to add packages.'"
-  },
-  "portsAttributes": {
-    "8501": {
-      "label": "Application",
-      "onAutoForward": "openPreview"
-    }
-  },
-  "forwardPorts": [
-    8501
-  ]
-}
