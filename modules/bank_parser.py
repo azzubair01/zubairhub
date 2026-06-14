@@ -73,11 +73,13 @@ def bank_statement_parser():
             TASK:
             1. Identify EVERY SINGLE transaction across ALL provided pages. Do not skip any.
             2. Extract the 'Opening Balance' or 'Previous Balance' from the start of the statement.
-            3. Extract details for: Date, Transaction Description, Credit, Debit, Amount, and Balance for each transaction.
-            4. Return the data as a JSON object.
+            3. Classify if this is a 'credit' card statement or a 'debit' (checking/savings) account statement.
+            4. Extract details for: Date, Transaction Description, Credit, Debit, Amount, and Balance for each transaction.
+            5. Return the data as a JSON object.
             
             JSON STRUCTURE:
             {
+              "statement_type": "credit" or "debit",
               "opening_balance": numeric_value_or_null,
               "transactions": [
                 {
@@ -95,6 +97,7 @@ def bank_statement_parser():
             - Return ONLY the JSON object. No other text, no markdown code blocks.
             - Ensure all transactions from all pages are included in the 'transactions' array.
             - Use null for missing numeric values.
+            - MANDATORY: Every transaction MUST have a valid date in YYYY-MM-DD format. Do not return null for date. If the date is missing for a transaction, infer it from surrounding transactions.
             - Standardize dates to YYYY-MM-DD format.
             """
             
@@ -118,6 +121,9 @@ def bank_statement_parser():
             
             try:
                 parsed_data = json.loads(json_str)
+                # Ensure statement_type exists, default to 'debit' if missing for backward compatibility
+                if 'statement_type' not in parsed_data:
+                    parsed_data['statement_type'] = 'debit'
                 st.session_state.analysis_result = parsed_data
                 st.success("Analysis complete! Data extracted as JSON.")
             except Exception as e:
@@ -132,10 +138,12 @@ def bank_statement_parser():
             if isinstance(st.session_state.analysis_result, dict) and 'transactions' in st.session_state.analysis_result:
                 df = pd.DataFrame(st.session_state.analysis_result['transactions'])
                 opening_balance_val = st.session_state.analysis_result.get('opening_balance', 0)
+                statement_type = st.session_state.analysis_result.get('statement_type', 'debit')
             else:
                 # Fallback for old cache format
                 df = pd.DataFrame(st.session_state.analysis_result)
                 opening_balance_val = 0
+                statement_type = 'debit'
             
             # Rename columns for display to match previous style
             display_df = df.rename(columns={
@@ -165,16 +173,25 @@ def bank_statement_parser():
             
             # Clean opening balance
             opening_balance = clean_numeric(opening_balance_val)
-            if opening_balance != 0:
-                st.info(f"Using extracted Opening Balance (treated as Debit): -{opening_balance}")
+            
+            # Logic: If credit card, opening balance is debit (negative). If debit card/account, opening balance is credit (positive).
+            if statement_type == 'credit':
+                opening_balance_sign = -1
+                st.info(f"Credit Card Statement detected. Treating Opening Balance as Debit: -{opening_balance}")
+            else:
+                opening_balance_sign = 1
+                st.info(f"Debit/Checking Statement detected. Treating Opening Balance as Credit: {opening_balance}")
 
             # Calculate balance if missing or if specifically requested to recalculate
             # We always recalculate if the balance column is entirely null
             if display_df['Balance'].isnull().all():
                 st.info("Calculating cumulative balance from Credits and Debits...")
                 net_change = display_df['Credit'] - display_df['Debit']
-                # Treating opening balance as a Debit (negative starting point)
-                display_df['Balance'] = (-opening_balance) + net_change.cumsum()
+                
+                # Starting point based on statement type
+                start_balance = opening_balance * opening_balance_sign
+                
+                display_df['Balance'] = start_balance + net_change.cumsum()
             else:
                 # Even if present, clean it
                 display_df['Balance'] = display_df['Balance'].apply(clean_numeric)
