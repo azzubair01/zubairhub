@@ -70,7 +70,9 @@ def weather_forecast():
 
     # Get current weather status & display image
     current_weather = weather_data[0].get("summary_forecast", "default") if weather_data else "default"
-    st.image(get_weather_image(current_weather), use_column_width=True)
+    weather_image = get_weather_image(current_weather)
+    if weather_image:
+        st.image(weather_image, use_column_width=True)
 
     # Process data for display
     if weather_data:
