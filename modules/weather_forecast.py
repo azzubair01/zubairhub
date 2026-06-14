@@ -72,7 +72,7 @@ def weather_forecast():
             'date': st.column_config.DateColumn()
         },
         hide_index=True,
-        use_container_width=True
+        width="stretch"
     )
 
     # Footer

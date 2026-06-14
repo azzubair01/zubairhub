@@ -71,7 +71,7 @@ def parse_document():
                 # extracted_table_df = pd.DataFrame(extracted_table['extracted_text'])
                 # extracted_table_df.columns = extracted_table_df.iloc[0]
                 # extracted_table_df = extracted_table_df.iloc[1:]
-                st.dataframe(extracted_table['extracted_text'], use_container_width=True, hide_index=True)
+                st.dataframe(extracted_table['extracted_text'], width="stretch", hide_index=True)
             else:
                 st.warning(f'No table detected on page {page_num}')
 

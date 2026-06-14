@@ -17,9 +17,9 @@ def generative_ai():
     # Combine RACE into a prompt
     full_prompt = f"Role: {role}\nAction: {action}\nContext: {context}\nExpectation: {expectation}"
 
-    # Show constructed prompt (optional)
-    st.markdown("**Constructed Prompt:**")
-    st.code(full_prompt)
+    # Show constructed prompt in an expander
+    with st.expander("📝 View Constructed Prompt", expanded=False):
+        st.code(full_prompt)
 
     with st.expander(label='Upload image', icon='🖼️'):
         # Image Input (Optional)
@@ -29,14 +29,19 @@ def generative_ai():
     image = None
     if uploaded_image:
         image = Image.open(uploaded_image)
-        st.image(image, caption="Uploaded Image", use_column_width=True)
+        with st.expander("🖼️ View Uploaded Image", expanded=True):
+            st.image(image, caption="Uploaded Image", width="stretch")
 
     # Submit Button
     if st.button("Generate Response"):
         if full_prompt.strip():
             with st.spinner("Generating response..."):
-                response_text = generate_response(full_prompt, image)
-                st.subheader("AI Response:")
-                st.info(response_text)
+                response_text = generate_response(
+                    full_prompt, 
+                    image, 
+                    model_name=st.session_state.get('selected_model')
+                )
+                with st.expander("🔮 View AI Response", expanded=True):
+                    st.info(response_text)
         else:
             st.warning("Please enter a text prompt.")
