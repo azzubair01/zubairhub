@@ -82,6 +82,12 @@ def bank_statement_parser():
             else:
                 st.error("Sample PDF not found.")
 
+        # Display preview if sample is loaded
+        if st.session_state.bank_images:
+            with st.expander(f"📄 View Masked Sample Pages ({len(st.session_state.bank_images)})", expanded=False):
+                for i, img in enumerate(st.session_state.bank_images):
+                    st.image(img, caption=f"Page {i+1}", width="stretch")
+
     # Submit Button - moved outside of if/else block
     if st.button("Analyze Statement"):
         # Explicit check for images in session state (works for both Uploaded or Loaded Sample)
