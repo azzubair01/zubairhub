@@ -137,7 +137,7 @@ def bank_statement_parser():
 
     elif data_source == "Use Masked Sample":
         if st.button("Load Masked Sample"):
-            sample_pdf_path = "modules/data/bank_statement_example.pdf"
+            sample_pdf_path = "modules/bank_data/bank_statement_example.pdf"
             if os.path.exists(sample_pdf_path):
                 try:
                     # Reuse PDF processing logic
