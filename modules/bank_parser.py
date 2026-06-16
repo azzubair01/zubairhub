@@ -11,7 +11,9 @@ from modules.utils.generative_ai import generate_response
 def bank_statement_parser():
     """Streamlit interface for parsing bank statements using Google Gemini."""
     st.title("🏦 Bank Statement Parser 🤖")
-    st.write("Upload your bank statement (image or PDF) to detect expenses, credits, and debits.")
+    
+    # Hybrid Data Source Selection
+    data_source = st.radio("Select Data Source:", ["Upload New File", "Use Masked Sample"])
 
     # Initialize session state for images and result
     if 'bank_images' not in st.session_state:
@@ -19,117 +21,127 @@ def bank_statement_parser():
     if 'analysis_result' not in st.session_state:
         st.session_state.analysis_result = None
 
-    # File Input
-    uploaded_file = st.file_uploader("Upload bank statement:", type=["png", "jpg", "jpeg", "pdf"])
+    if data_source == "Upload New File":
+        # File Input
+        uploaded_file = st.file_uploader("Upload bank statement:", type=["png", "jpg", "jpeg", "pdf"])
 
-    if uploaded_file:
-        # Reset images if a new file is uploaded
-        # We use the file name to check if it's the same file to avoid redundant processing
-        file_key = f"{uploaded_file.name}_{uploaded_file.size}"
-        if st.session_state.get('last_uploaded_file_key') != file_key:
-            st.session_state.bank_images = []
-            st.session_state.analysis_result = None
-            st.session_state.last_uploaded_file_key = file_key
-            
-            try:
-                if uploaded_file.type.startswith('image'):
-                    st.session_state.bank_images = [Image.open(uploaded_file)]
-                elif uploaded_file.type == 'application/pdf':
-                    # Convert all pages of PDF to images
-                    doc = pymupdf.open(stream=uploaded_file.read(), filetype="pdf")
-                    images = []
-                    for page_index in range(len(doc)):
-                        page = doc.load_page(page_index)
-                        pix = page.get_pixmap()
-                        img_data = pix.tobytes("png")
-                        images.append(Image.open(io.BytesIO(img_data)))
-                    st.session_state.bank_images = images
-                    doc.close()
-                else:
-                    st.error("Unsupported file type.")
-                    st.session_state.bank_images = []
-            except Exception as e:
-                st.error(f"Error processing file: {e}")
+        if uploaded_file:
+            # Reset images if a new file is uploaded
+            # We use the file name to check if it's the same file to avoid redundant processing
+            file_key = f"{uploaded_file.name}_{uploaded_file.size}"
+            if st.session_state.get('last_uploaded_file_key') != file_key:
                 st.session_state.bank_images = []
+                st.session_state.analysis_result = None
+                st.session_state.last_uploaded_file_key = file_key
+                
+                try:
+                    if uploaded_file.type.startswith('image'):
+                        st.session_state.bank_images = [Image.open(uploaded_file)]
+                    elif uploaded_file.type == 'application/pdf':
+                        # Convert all pages of PDF to images
+                        doc = pymupdf.open(stream=uploaded_file.read(), filetype="pdf")
+                        images = []
+                        for page_index in range(len(doc)):
+                            page = doc.load_page(page_index)
+                            pix = page.get_pixmap()
+                            img_data = pix.tobytes("png")
+                            images.append(Image.open(io.BytesIO(img_data)))
+                        st.session_state.bank_images = images
+                        doc.close()
+                    else:
+                        st.error("Unsupported file type.")
+                        st.session_state.bank_images = []
+                except Exception as e:
+                    st.error(f"Error processing file: {e}")
+                    st.session_state.bank_images = []
 
-        if st.session_state.bank_images:
-            with st.expander(f"📄 View Uploaded Pages ({len(st.session_state.bank_images)})", expanded=False):
-                for i, img in enumerate(st.session_state.bank_images):
-                    st.image(img, caption=f"Page {i+1}", width="stretch")
+            if st.session_state.bank_images:
+                with st.expander(f"📄 View Uploaded Pages ({len(st.session_state.bank_images)})", expanded=False):
+                    for i, img in enumerate(st.session_state.bank_images):
+                        st.image(img, caption=f"Page {i+1}", width="stretch")
 
-    # Submit Button
-    if st.button("Analyze Statement"):
-        # Explicit check for images in session state
-        images = st.session_state.get('bank_images', [])
-        
-        if not images:
-            st.warning("Please upload a valid file first.")
-            return
-
-        with st.spinner("Analyzing all pages with Gemini..."):
-            prompt = """
-            You are an expert financial auditor. Carefully analyze the provided bank statement images.
+        # Submit Button
+        if st.button("Analyze Statement"):
+            # Explicit check for images in session state
+            images = st.session_state.get('bank_images', [])
             
-            TASK:
-            1. Identify EVERY SINGLE transaction across ALL provided pages. Do not skip any.
-            2. Extract the 'Opening Balance' or 'Previous Balance' from the start of the statement.
-            3. Classify if this is a 'credit' card statement or a 'debit' (checking/savings) account statement.
-            4. Extract details for: Date, Transaction Description, Credit, Debit, Amount, and Balance for each transaction.
-            5. Return the data as a JSON object.
-            
-            JSON STRUCTURE:
-            {
-              "statement_type": "credit" or "debit",
-              "opening_balance": numeric_value_or_null,
-              "transactions": [
+            if not images:
+                st.warning("Please upload a valid file first.")
+                return
+
+            with st.spinner("Analyzing all pages with Gemini..."):
+                prompt = """
+                You are an expert financial auditor. Carefully analyze the provided bank statement images.
+                
+                TASK:
+                1. Identify EVERY SINGLE transaction across ALL provided pages. Do not skip any.
+                2. Extract the 'Opening Balance' or 'Previous Balance' from the start of the statement.
+                3. Classify if this is a 'credit' card statement or a 'debit' (checking/savings) account statement.
+                4. Extract details for: Date, Transaction Description, Credit, Debit, Amount, and Balance for each transaction.
+                5. Return the data as a JSON object.
+                
+                JSON STRUCTURE:
                 {
-                  "date": "YYYY-MM-DD",
-                  "transaction": "Full description here",
-                  "credit": numeric_value_or_null,
-                  "debit": numeric_value_or_null,
-                  "amount": numeric_value_or_null,
-                  "balance": numeric_value_or_null
+                  "statement_type": "credit" or "debit",
+                  "opening_balance": numeric_value_or_null,
+                  "transactions": [
+                    {
+                      "date": "YYYY-MM-DD",
+                      "transaction": "Full description here",
+                      "credit": numeric_value_or_null,
+                      "debit": numeric_value_or_null,
+                      "amount": numeric_value_or_null,
+                      "balance": numeric_value_or_null
+                    }
+                  ]
                 }
-              ]
-            }
-            
-            CONSTRAINTS:
-            - Return ONLY the JSON object. No other text, no markdown code blocks.
-            - Ensure all transactions from all pages are included in the 'transactions' array.
-            - Use null for missing numeric values.
-            - MANDATORY: Every transaction MUST have a valid date in YYYY-MM-DD format. Do not return null for date. If the date is missing for a transaction, infer it from surrounding transactions.
-            - Standardize dates to YYYY-MM-DD format.
-            """
-            
-            with st.expander("📝 View Analysis Prompt", expanded=False):
-                st.code(prompt)
-            
-            # Reusing existing generate_response function from generative_ai utils
-            result = generate_response(
-                prompt, 
-                st.session_state.bank_images, 
-                model_name=st.session_state.get('selected_model')
-            )
-            
-            # Clean JSON response (remove potential markdown wrappers)
-            json_str = result.strip()
-            if json_str.startswith("```json"):
-                json_str = json_str[7:]
-            if json_str.endswith("```"):
-                json_str = json_str[:-3]
-            json_str = json_str.strip()
-            
+                
+                CONSTRAINTS:
+                - Return ONLY the JSON object. No other text, no markdown code blocks.
+                - Ensure all transactions from all pages are included in the 'transactions' array.
+                - Use null for missing numeric values.
+                - MANDATORY: Every transaction MUST have a valid date in YYYY-MM-DD format. Do not return null for date. If the date is missing for a transaction, infer it from surrounding transactions.
+                - Standardize dates to YYYY-MM-DD format.
+                """
+                
+                with st.expander("📝 View Analysis Prompt", expanded=False):
+                    st.code(prompt)
+                
+                # Reusing existing generate_response function from generative_ai utils
+                result = generate_response(
+                    prompt, 
+                    st.session_state.bank_images, 
+                    model_name=st.session_state.get('selected_model')
+                )
+                
+                # Clean JSON response (remove potential markdown wrappers)
+                json_str = result.strip()
+                if json_str.startswith("```json"):
+                    json_str = json_str[7:]
+                if json_str.endswith("```"):
+                    json_str = json_str[:-3]
+                json_str = json_str.strip()
+                
+                try:
+                    parsed_data = json.loads(json_str)
+                    # Ensure statement_type exists, default to 'debit' if missing for backward compatibility
+                    if 'statement_type' not in parsed_data:
+                        parsed_data['statement_type'] = 'debit'
+                    st.session_state.analysis_result = parsed_data
+                    st.success("Analysis complete! Data extracted as JSON.")
+                except Exception as e:
+                    st.error(f"Error parsing AI response as JSON: {e}")
+                    st.text("Raw response:")
+                    st.code(result)
+
+    elif data_source == "Use Masked Sample":
+        if st.button("Load Masked Sample"):
             try:
-                parsed_data = json.loads(json_str)
-                # Ensure statement_type exists, default to 'debit' if missing for backward compatibility
-                if 'statement_type' not in parsed_data:
-                    parsed_data['statement_type'] = 'debit'
-                st.session_state.analysis_result = parsed_data
-                st.success("Analysis complete! Data extracted as JSON.")
+                with open("modules/data/masked_sample.json", "r") as f:
+                    st.session_state.analysis_result = json.load(f)
+                    st.success("Sample data loaded successfully!")
             except Exception as e:
-                st.error(f"Error parsing AI response as JSON: {e}")
-                st.text("Raw response:")
-                st.code(result)
+                st.error(f"Error loading sample data: {e}")
             
     # Display results if they exist in session state
     if st.session_state.analysis_result:
