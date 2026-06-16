@@ -9,6 +9,10 @@ import re
 import plotly.express as px
 from modules.utils.generative_ai import generate_response
 
+def clear_data_source():
+    st.session_state.bank_images = []
+    st.session_state.analysis_result = None
+
 def bank_statement_parser():
     """Streamlit interface for parsing bank statements using Google Gemini."""
     st.title("🏦 Bank Statement Parser 🤖")
@@ -19,7 +23,8 @@ def bank_statement_parser():
         "Choose your data source:", 
         ["Upload New File", "Use Masked Sample"], 
         horizontal=True,
-        label_visibility="collapsed"
+        label_visibility="collapsed",
+        on_change=clear_data_source
     )
     st.markdown("---")
 
