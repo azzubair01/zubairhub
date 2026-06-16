@@ -14,7 +14,14 @@ def bank_statement_parser():
     st.title("🏦 Bank Statement Parser 🤖")
     
     # Hybrid Data Source Selection
-    data_source = st.radio("Select Data Source:", ["Upload New File", "Use Masked Sample"])
+    st.subheader("Select Data Source")
+    data_source = st.radio(
+        "Choose your data source:", 
+        ["Upload New File", "Use Masked Sample"], 
+        horizontal=True,
+        label_visibility="collapsed"
+    )
+    st.markdown("---")
 
     # Initialize session state for images and result
     if 'bank_images' not in st.session_state:
