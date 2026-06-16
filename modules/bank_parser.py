@@ -3,6 +3,7 @@ from PIL import Image
 import pymupdf # Required for PDF to image conversion
 import io
 import json
+import os
 import pandas as pd
 import re
 import plotly.express as px
