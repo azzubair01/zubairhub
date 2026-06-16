@@ -136,12 +136,24 @@ def bank_statement_parser():
 
     elif data_source == "Use Masked Sample":
         if st.button("Load Masked Sample"):
-            try:
-                with open("modules/data/masked_sample.json", "r") as f:
-                    st.session_state.analysis_result = json.load(f)
-                    st.success("Sample data loaded successfully!")
-            except Exception as e:
-                st.error(f"Error loading sample data: {e}")
+            sample_pdf_path = "modules/data/bank_statement_example.pdf"
+            if os.path.exists(sample_pdf_path):
+                try:
+                    # Reuse PDF processing logic
+                    doc = pymupdf.open(sample_pdf_path)
+                    images = []
+                    for page_index in range(len(doc)):
+                        page = doc.load_page(page_index)
+                        pix = page.get_pixmap()
+                        img_data = pix.tobytes("png")
+                        images.append(Image.open(io.BytesIO(img_data)))
+                    st.session_state.bank_images = images
+                    doc.close()
+                    st.success("Sample PDF loaded! Now click 'Analyze Statement' to process it.")
+                except Exception as e:
+                    st.error(f"Error loading sample PDF: {e}")
+            else:
+                st.error("Sample PDF not found.")
             
     # Display results if they exist in session state
     if st.session_state.analysis_result:
