@@ -15,9 +15,9 @@ def fuel_price():
     # API Call Function
     @st.cache_data
     def fetch_fuel_data():
-        BASE_URL = 'https://api.data.gov.my/'
+        BASE_URL = 'https://api.data.gov.my'
         ENDPOINT = 'data-catalogue?meta=True&filter=level@series_type&id=fuelprice'
-        FULL_URL = os.path.join(BASE_URL, ENDPOINT)
+        FULL_URL = f"{BASE_URL}/{ENDPOINT}"
 
         try:
             response = requests.get(FULL_URL)
@@ -43,12 +43,16 @@ def fuel_price():
 
         col1, col2 = st.columns(2)
         with col1:
-            start_date, end_date = st.date_input(
+            date_range = st.date_input(
                 "Select Date Range",
                 [default_start_date, max_date],
                 min_value=min_date,
                 max_value=max_date
             )
+            if not isinstance(date_range, (list, tuple)) or len(date_range) < 2:
+                st.info("Please select both start and end dates.")
+                return
+            start_date, end_date = date_range[0], date_range[1]
 
         with col2:
             fuel_types = ['ron95', 'ron97', 'diesel']
@@ -83,11 +87,12 @@ def fuel_price():
 
     # Footer
     st.divider()
+    last_updated = df['date'].max().strftime('%Y-%m-%d') if (fuel_data and 'df' in locals() and not df.empty) else "N/A"
     col1, col2 = st.columns(2)
     with col1:
         st.markdown(f"""
         <div style="text-align: left;">
-            🔄 <strong>Data last updated:</strong> {df['date'].max().strftime('%Y-%m-%d')}
+            🔄 <strong>Data last updated:</strong> {last_updated}
         </div>
         """, unsafe_allow_html=True)
 
