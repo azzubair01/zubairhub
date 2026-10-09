@@ -18,15 +18,19 @@ CACHE_DIR = "modules/cache"
 # Ensure the cache directory exists
 os.makedirs(CACHE_DIR, exist_ok=True)
 
-# Initialize the Gemini API client once
+# Initialize the Gemini API client safely
 GENAI_API_KEY = os.getenv("GEMINI_API_KEY", "")
-client = google.genai.Client(api_key=GENAI_API_KEY)
+client = None
+if GENAI_API_KEY:
+    try:
+        client = google.genai.Client(api_key=GENAI_API_KEY)
+    except Exception:
+        client = None
 
-DEFAULT_MODEL = "gemini-3.5-flash"
+DEFAULT_MODEL = "gemini-2.0-flash"
 
 # Model Quotas (Free Tier Defaults)
 MODEL_QUOTAS = {
-    "gemini-3.5-flash": {"RPM": 10, "RPD": 1500},
     "gemini-2.0-flash": {"RPM": 15, "RPD": 1500},
     "gemini-1.5-flash": {"RPM": 15, "RPD": 1500},
 }
@@ -128,6 +132,15 @@ def generate_response(prompt_text: str, images: list[Image.Image] | Image.Image 
                         "data": base64.b64encode(img_data).decode(),
                     }
                 })
+
+        # Check client availability
+        global client
+        if client is None:
+            key = os.getenv("GEMINI_API_KEY", "")
+            if key:
+                client = google.genai.Client(api_key=key)
+            else:
+                return "Error: GEMINI_API_KEY is not configured. Please add GEMINI_API_KEY to your .env file."
 
         # Call Gemini API
         response = client.models.generate_content(

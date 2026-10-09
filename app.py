@@ -75,14 +75,13 @@ st.sidebar.markdown("---")
 if project_select == '🏦 Bank Statement Parser':
     st.sidebar.subheader("Model Configuration")
     MODELS = {
-        "Gemini 3.5 Flash": "gemini-3.5-flash",
         "Gemini 2.0 Flash": "gemini-2.0-flash",
         "Gemini 1.5 Flash": "gemini-1.5-flash",
     }
     selected_model_display = st.sidebar.selectbox(
         "Select Model:",
         options=list(MODELS.keys()),
-        index=0  # Default to 3.5 Flash
+        index=0  # Default to 2.0 Flash
     )
     selected_model_id = MODELS[selected_model_display]
     st.session_state.selected_model = selected_model_id
@@ -103,7 +102,7 @@ if project_select == '🏦 Bank Statement Parser':
 else:
     # Ensure a default model is set for other modules that might use it
     if 'selected_model' not in st.session_state:
-        st.session_state.selected_model = "gemini-3.5-flash"
+        st.session_state.selected_model = "gemini-2.0-flash"
 
 page_names_to_func[project_select]()
 
