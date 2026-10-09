@@ -102,4 +102,4 @@ def family_graph():
                             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
                         )
 
-        st.plotly_chart(fig, width="stretch")
+        st.plotly_chart(fig, use_container_width=True)

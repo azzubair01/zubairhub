@@ -55,7 +55,7 @@ def detect_object():
                 file_name="image_object_detection.png",
                 mime="image/png",
                 type='primary',
-                width='stretch'
+                use_container_width=True
             )
             # Display and allow download of predictions as JSON
             # st.json(detections)  # Display the detections as a JSON object

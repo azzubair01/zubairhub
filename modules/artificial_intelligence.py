@@ -30,7 +30,7 @@ def generative_ai():
     if uploaded_image:
         image = Image.open(uploaded_image)
         with st.expander("🖼️ View Uploaded Image", expanded=True):
-            st.image(image, caption="Uploaded Image", width="stretch")
+            st.image(image, caption="Uploaded Image", use_container_width=True)
 
     # Submit Button
     if st.button("Generate Response"):
