@@ -21,5 +21,6 @@
 - Document & Image Parsing: Always use context managers or `try...finally` with explicit `os.unlink()` for temp files created via `NamedTemporaryFile(delete=False)`.
 
 ## Deployment Status
-- Local branch: `main` (clean, all fixes committed).
-- No unpushed changes pushed remotely (office hours / local-only commit rule observed).
+- Remote `origin/main` is fully up to date with local `main` (synced at commit `429d58a`).
+- GitHub authentication verified via Personal Access Token (PAT).
+- Working tree is clean.
