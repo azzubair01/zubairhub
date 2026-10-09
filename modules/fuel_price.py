@@ -1,4 +1,5 @@
 import os
+import json
 import logging
 import requests
 import datetime
@@ -26,6 +27,17 @@ def fuel_price():
         except requests.exceptions.RequestException as e:
             st.error(f"API Error: {e}")
             return []
+
+    @st.cache_data
+    def load_fuel_events():
+        events_file = 'modules/fuel_price_data/events.json'
+        if os.path.exists(events_file):
+            try:
+                with open(events_file, 'r', encoding='utf-8') as f:
+                    return json.load(f)
+            except Exception as e:
+                logging.error(f"Failed to load fuel events: {e}")
+        return []
 
     # Fetch Data
     with st.spinner("Fetching fuel price data..."):
@@ -58,17 +70,77 @@ def fuel_price():
             fuel_types = ['ron95', 'ron97', 'diesel']
             selected_fuels = st.multiselect("Select Fuel Type", fuel_types, default=fuel_types)
 
+        # Event Overlay Controls
+        events = load_fuel_events()
+        col_ev1, col_ev2 = st.columns([1, 2])
+        with col_ev1:
+            show_events = st.checkbox("📌 Show Key Historical Events", value=True)
+        with col_ev2:
+            if show_events:
+                category_options = ["All Categories", "🇲🇾 Domestic Policy", "🌍 Global Oil Shock"]
+                selected_category = st.radio("Filter Category", category_options, horizontal=True)
+            else:
+                selected_category = "All Categories"
+
+        # Filter events in selected date range and category
+        active_events = []
+        if show_events and events:
+            for ev in events:
+                ev_date = pd.to_datetime(ev["date"])
+                if pd.to_datetime(start_date) <= ev_date <= pd.to_datetime(end_date):
+                    if selected_category == "All Categories":
+                        active_events.append(ev)
+                    elif selected_category == "🇲🇾 Domestic Policy" and ev.get("category") == "Domestic Policy":
+                        active_events.append(ev)
+                    elif selected_category == "🌍 Global Oil Shock" and ev.get("category") == "Global Oil Shock":
+                        active_events.append(ev)
+
         # Apply Filters
         filtered_df = df[(df['date'] >= pd.to_datetime(start_date)) & (df['date'] <= pd.to_datetime(end_date))]
         df_melted = filtered_df.melt(id_vars=['date'], value_vars=selected_fuels, var_name='Fuel Type', value_name='Price')
 
         # Plotly Line Chart
         if not df_melted.empty:
+            chart_title = 'Weekly Fuel Price Trends with Key Historical Events' if active_events else 'Weekly Fuel Price Trends'
             fig = px.line(df_melted, x='date', y='Price', color='Fuel Type',
-                          title='Weekly Fuel Price Trends',
+                          title=chart_title,
                           labels={'date': 'Date', 'Price': 'Price/Litre (MYR)', 'Fuel Type': 'Fuel Type'},
                           markers=True)
-            st.plotly_chart(fig)
+
+            # Add vertical dashed lines with badges for active events
+            for ev in active_events:
+                fig.add_vline(
+                    x=pd.to_datetime(ev["date"]).timestamp() * 1000,
+                    line_width=1.5,
+                    line_dash="dash",
+                    line_color=ev.get("color", "#7f7f7f"),
+                    annotation_text=ev.get("badge", ev.get("title", "")),
+                    annotation_position="top left",
+                    annotation_font_size=10,
+                    annotation_font_color="#ffffff",
+                    annotation_bgcolor=ev.get("color", "#7f7f7f")
+                )
+
+            st.plotly_chart(fig, use_container_width=True)
+
+            # Event Timeline Expander
+            if active_events:
+                with st.expander(f"📰 Key Historical Events in Selected Period ({len(active_events)})", expanded=True):
+                    for ev in active_events:
+                        badge = ev.get("badge", "")
+                        title = ev.get("title", "")
+                        date_str = ev.get("date", "")
+                        desc = ev.get("description", "")
+                        color = ev.get("color", "#1f77b4")
+                        st.markdown(
+                            f"""
+                            <div style="border-left: 4px solid {color}; padding-left: 10px; margin-bottom: 12px;">
+                                <strong>{date_str}</strong> | <span style="background-color: {color}; color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.85em;">{badge}</span> <strong>{title}</strong>
+                                <p style="margin: 4px 0 0 0;">{desc}</p>
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
         else:
             st.warning("No data available for the selected filters.")
 

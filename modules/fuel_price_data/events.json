@@ -1,0 +1,82 @@
+[
+  {
+    "date": "2018-05-30",
+    "title": "Post-GE14 Fuel Price Stabilization",
+    "category": "Domestic Policy",
+    "badge": "🇲🇾 GE14 Cap",
+    "description": "Government stabilized RON95 retail price at RM 2.20/L following the 14th General Election.",
+    "color": "#1f77b4"
+  },
+  {
+    "date": "2019-01-05",
+    "title": "Automatic Pricing Mechanism (APM) Resumption",
+    "category": "Domestic Policy",
+    "badge": "🇲🇾 APM Weekly",
+    "description": "Weekly managed float under the Automatic Pricing Mechanism (APM) formula was reintroduced.",
+    "color": "#1f77b4"
+  },
+  {
+    "date": "2020-03-08",
+    "title": "Russia-Saudi Oil Price War",
+    "category": "Global Oil Shock",
+    "badge": "🌍 Price War",
+    "description": "OPEC+ negotiations broke down, triggering a price war that caused global crude oil benchmarks to plummet.",
+    "color": "#d62728"
+  },
+  {
+    "date": "2020-03-18",
+    "title": "COVID-19 MCO & Global Demand Collapse",
+    "category": "Global Oil Shock",
+    "badge": "🌍 COVID-19 Crash",
+    "description": "Worldwide lockdowns collapsed transportation fuel demand; Malaysian retail RON95 dropped to a historic low of RM 1.25/L in April 2020.",
+    "color": "#d62728"
+  },
+  {
+    "date": "2021-02-10",
+    "title": "Retail Fuel Ceiling Price Implementation",
+    "category": "Domestic Policy",
+    "badge": "🇲🇾 Price Ceiling",
+    "description": "Government instituted ceiling prices of RM 2.05/L for RON95 and RM 2.15/L for Diesel to shield the public from rising crude prices.",
+    "color": "#1f77b4"
+  },
+  {
+    "date": "2022-02-24",
+    "title": "Russia-Ukraine War Outbreak",
+    "category": "Global Oil Shock",
+    "badge": "🌍 Ukraine War",
+    "description": "Geopolitical conflict and energy sanctions pushed Brent crude above $130/bbl; uncapped RON97 soared to an all-time record of RM 4.84/L.",
+    "color": "#d62728"
+  },
+  {
+    "date": "2022-10-05",
+    "title": "OPEC+ 2 Million BPD Production Cut",
+    "category": "Global Oil Shock",
+    "badge": "🌍 OPEC+ Cut",
+    "description": "OPEC+ agreed to its largest oil production cut since 2020 (2M barrels per day) to support falling crude prices.",
+    "color": "#d62728"
+  },
+  {
+    "date": "2023-10-07",
+    "title": "Middle East Conflict & Supply Route Risks",
+    "category": "Global Oil Shock",
+    "badge": "🌍 Middle East Crisis",
+    "description": "Escalation in the Middle East raised shipping risk premiums through key maritime oil transit chokepoints.",
+    "color": "#d62728"
+  },
+  {
+    "date": "2024-06-10",
+    "title": "Peninsular Diesel Subsidy Rationalization (BUDI MADANI)",
+    "category": "Domestic Policy",
+    "badge": "🇲🇾 Diesel Rationalization",
+    "description": "Peninsular Malaysia diesel price was floated from RM 2.15 to RM 3.35/L alongside BUDI MADANI cash transfers and SKDS fleet quotas.",
+    "color": "#1f77b4"
+  },
+  {
+    "date": "2024-10-18",
+    "title": "Budget 2025 Targeted RON95 Announcement",
+    "category": "Domestic Policy",
+    "badge": "🇲🇾 Budget 2025",
+    "description": "Government announced targeted subsidy rationalization for RON95 scheduled for mid-2025 to curb subsidy leakage.",
+    "color": "#1f77b4"
+  }
+]
