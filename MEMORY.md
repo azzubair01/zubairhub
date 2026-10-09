@@ -14,7 +14,8 @@
   - `ZH-106` (`0d018b3`): Implemented `try...finally` temporary file cleanup (`os.unlink`) in `computer_vision.py` and `natural_language.py`; added context manager protocol (`__enter__`, `__exit__`) and handle resetting to `PDFExtractor` in `modules/utils/document_parser.py`.
   - `ZH-107` (`ed2227d`): Updated `.gitignore` to exclude `venv_x86_64/`, `Untitled.ipynb`, `prasarana_route.ipynb`, `*.xlsx.bak`; restored weather forecast image handling and tracked lightweight image assets in `images/`.
   - `ZH-110` (`fb41474`): Added historical events overlay with vertical dashed badges on Plotly chart, category filtering, and interactive timeline expander in `modules/fuel_price.py` powered by `modules/fuel_price_data/events.json`.
-  - `ZH-112`: Fixed event markers rendering using native Plotly shapes and annotations anchored to `paper`, staggered overlapping badges with `yshift`, widened default date range to full dataset history, resolved path via `__file__`, and added empty state feedback.
+  - `ZH-112` (`026826d`): Fixed event markers rendering using native Plotly shapes and annotations anchored to `paper`, staggered overlapping badges with `yshift`, widened default date range to full dataset history, resolved path via `__file__`, and added empty state feedback.
+  - `ZH-113`: Migrated deprecated `use_container_width=True` to modern `width='stretch'` across all Streamlit UI components (`st.image`, `st.dataframe`, `st.plotly_chart`, `st.data_editor`, `st.download_button`).
 
 ## Architectural Decisions & Notes
 - Added `justfile` with ARM64-compliant commands (`setup`, `setup-uv`, `run`) adhering to Apple Silicon conventions.

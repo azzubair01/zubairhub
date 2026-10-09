@@ -71,7 +71,7 @@ def bank_statement_parser():
             if st.session_state.bank_images:
                 with st.expander(f"📄 View Uploaded Pages ({len(st.session_state.bank_images)})", expanded=False):
                     for i, img in enumerate(st.session_state.bank_images):
-                        st.image(img, caption=f"Page {i+1}", use_container_width=True)
+                        st.image(img, caption=f"Page {i+1}", width='stretch')
 
     elif data_source == "Use Masked Sample":
         if st.button("Load Masked Sample"):
@@ -98,7 +98,7 @@ def bank_statement_parser():
         if st.session_state.bank_images:
             with st.expander(f"📄 View Masked Sample Pages ({len(st.session_state.bank_images)})", expanded=False):
                 for i, img in enumerate(st.session_state.bank_images):
-                    st.image(img, caption=f"Page {i+1}", use_container_width=True)
+                    st.image(img, caption=f"Page {i+1}", width='stretch')
 
     # Submit Button - moved outside of if/else block
     if st.button("Analyze Statement"):
@@ -270,7 +270,7 @@ def bank_statement_parser():
                         markers=True
                     )
                     fig.update_layout(xaxis_title="Date", yaxis_title="Balance", hovermode='x unified')
-                    st.plotly_chart(fig, use_container_width=True)
+                    st.plotly_chart(fig, width='stretch')
                 else:
                     st.info("Not enough valid data to generate a balance chart.")
             except Exception as chart_err:
@@ -278,7 +278,7 @@ def bank_statement_parser():
 
             # --- 2. Table Display (Second) ---
             st.subheader("📝 Transaction Details")
-            st.dataframe(display_df, use_container_width=True)
+            st.dataframe(display_df, width='stretch')
 
             # --- 3. Download Logic (Third) ---
             try:
@@ -288,7 +288,7 @@ def bank_statement_parser():
                     data=csv_data,
                     file_name="bank_statement_analysis.csv",
                     mime="text/csv",
-                    use_container_width=True
+                    width='stretch'
                 )
             except Exception as e:
                 st.write("Download as CSV is currently unavailable.")

@@ -39,7 +39,7 @@ def family_graph():
     edited_df = st.data_editor(
         family_df,
         num_rows="dynamic",
-        use_container_width=True,
+        width='stretch',
         column_config={
             "Name": st.column_config.TextColumn("Name", required=True),
             "Parent": st.column_config.TextColumn("Parent", required=True),
@@ -102,4 +102,4 @@ def family_graph():
                             yaxis=dict(showgrid=False, zeroline=False, showticklabels=False))
                         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')

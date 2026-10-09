@@ -69,7 +69,7 @@ def parse_document():
 
                 if not pd.DataFrame(extracted_table['extracted_text']).empty:
                     st.info(f'Table detected on page {page_num}')
-                    st.dataframe(extracted_table['extracted_text'], use_container_width=True, hide_index=True)
+                    st.dataframe(extracted_table['extracted_text'], width='stretch', hide_index=True)
                 else:
                     st.warning(f'No table detected on page {page_num}')
 

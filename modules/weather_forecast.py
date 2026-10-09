@@ -91,7 +91,7 @@ def weather_forecast():
     current_weather = weather_data[0].get("summary_forecast", "default") if weather_data else "default"
     weather_image = get_weather_image(current_weather)
     if weather_image:
-        st.image(weather_image, use_container_width=True)
+        st.image(weather_image, width='stretch')
 
     # Process data for display
     if weather_data:
@@ -115,7 +115,7 @@ def weather_forecast():
                 "date": st.column_config.DateColumn()
             },
             hide_index=True,
-            use_container_width=True
+            width='stretch'
         )
 
         # Footer
