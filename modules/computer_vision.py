@@ -4,10 +4,12 @@ import streamlit as st
 from io import BytesIO
 from tempfile import NamedTemporaryFile
 
-from modules.utils.object_detection import DetrObjectDetection
 from modules.utils.text_recognition import OCRExtractor
 
-detector = DetrObjectDetection()
+@st.cache_resource
+def get_object_detector():
+    from modules.utils.object_detection import DetrObjectDetection
+    return DetrObjectDetection()
 
 def detect_object():
     st.title("Let's detect objects 📷")
@@ -34,6 +36,7 @@ def detect_object():
 
         # Run object detection
         with st.spinner("Running object detection..."):
+            detector = get_object_detector()
             labeled_image, detections = detector.detect_objects(img)
 
         # Provide download options if detections are successful

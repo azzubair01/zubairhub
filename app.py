@@ -14,57 +14,57 @@ initialise_quotas()
 
 st.sidebar.title('Navigation')
 
-def load_intro():
+def render_intro():
     from modules.introduction import intro
-    return intro
+    intro()
 
-def load_family_graph():
+def render_family_graph():
     from modules.social_graph import family_graph
-    return family_graph
+    family_graph()
 
-def load_detect_object():
+def render_detect_object():
     from modules.computer_vision import detect_object
-    return detect_object
+    detect_object()
 
-def load_parse_document():
+def render_parse_document():
     from modules.natural_language import parse_document
-    return parse_document
+    parse_document()
 
-def load_extract_text():
+def render_extract_text():
     from modules.computer_vision import extract_text
-    return extract_text
+    extract_text()
 
-def load_generative_ai():
+def render_generative_ai():
     from modules.artificial_intelligence import generative_ai
-    return generative_ai
+    generative_ai()
 
-def load_bank_statement_parser():
+def render_bank_statement_parser():
     from modules.bank_parser import bank_statement_parser
-    return bank_statement_parser
+    bank_statement_parser()
 
-def load_weather_forecast():
+def render_weather_forecast():
     from modules.weather_forecast import weather_forecast
-    return weather_forecast
+    weather_forecast()
 
-def load_fuel_price():
+def render_fuel_price():
     from modules.fuel_price import fuel_price
-    return fuel_price
+    fuel_price()
 
-def load_transform_sap_data():
+def render_transform_sap_data():
     from modules.personal import transform_sap_data
-    return transform_sap_data
+    transform_sap_data()
 
 page_names_to_func = {
-    '📌 Introduction': load_intro(),
-    '👨‍👩‍👧‍👦 Family Graph': load_family_graph(),
-    '📷 Object Detection': load_detect_object(),
-    '📄 Document Parsing': load_parse_document(),
-    '🔍 Text Extraction': load_extract_text(),
-    '🔮 Generative AI': load_generative_ai(),
-    '🏦 Bank Statement Parser': load_bank_statement_parser(),
-    '🌥️ Weather Forecast': load_weather_forecast(),
-    '⛽ Fuel Price': load_fuel_price(),
-    '💼 Personal': load_transform_sap_data(),
+    '📌 Introduction': render_intro,
+    '👨‍👩‍👧‍👦 Family Graph': render_family_graph,
+    '📷 Object Detection': render_detect_object,
+    '📄 Document Parsing': render_parse_document,
+    '🔍 Text Extraction': render_extract_text,
+    '🔮 Generative AI': render_generative_ai,
+    '🏦 Bank Statement Parser': render_bank_statement_parser,
+    '🌥️ Weather Forecast': render_weather_forecast,
+    '⛽ Fuel Price': render_fuel_price,
+    '💼 Personal': render_transform_sap_data,
 }
 
 project_select = st.sidebar.radio('Select project to display:', (list(page_names_to_func.keys())))
