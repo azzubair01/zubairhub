@@ -18,8 +18,12 @@ class PDFExtractor:
         self.open_pdf()
 
     def open_pdf(self):
-        self.doc = pymupdf.open(self.file_path)
-        self.logger.info(f'Reading {self.file_path} with {len(self.doc)} pages')
+        if isinstance(self.file_path, (bytes, bytearray)):
+            self.doc = pymupdf.open(stream=self.file_path, filetype="pdf")
+            self.logger.info(f'Reading PDF stream with {len(self.doc)} pages')
+        else:
+            self.doc = pymupdf.open(self.file_path)
+            self.logger.info(f'Reading {self.file_path} with {len(self.doc)} pages')
         self.total_pages = len(self.doc)
 
     def extract_text(self, page_no:int):
@@ -66,3 +70,10 @@ class PDFExtractor:
     def close_pdf(self):
         if self.doc:
             self.doc.close()
+            self.doc = None
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close_pdf()

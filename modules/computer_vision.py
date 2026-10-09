@@ -111,32 +111,44 @@ def extract_text():
         selected_lang = '+'.join(selected_lang) if selected_lang else ''
 
     ocr = OCRExtractor(lang=selected_lang)
+    temp_file_path = None
 
-    if image_option == 'Upload':
-        if uploaded_file is None:
-            st.error("No file uploaded yet.")
-        else:
-            try:
-                temp_file = NamedTemporaryFile(delete=False, suffix=uploaded_file.name.split('.')[-1])
+    try:
+        text = None
+        img = None
+
+        if image_option == 'Upload':
+            if uploaded_file is None:
+                st.error("No file uploaded yet.")
+            else:
+                suffix = os.path.splitext(uploaded_file.name)[1]
+                temp_file = NamedTemporaryFile(delete=False, suffix=suffix)
                 temp_file.write(uploaded_file.getbuffer())
                 temp_file.close()
-                uploaded_file = temp_file.name
+                temp_file_path = temp_file.name
 
-                # Extract text from the image
-                text = ocr.extract_text(uploaded_file, config_option)
+                with st.spinner("Running OCR..."):
+                    text = ocr.extract_text(temp_file_path, config_option)
+                img = Image.open(temp_file_path).copy()
 
-            except Exception as e:
-                st.error(f"Error opening image: {str(e)}")
+        elif image_option == 'Example':
+            if uploaded_file is not None and os.path.exists(uploaded_file):
+                with st.spinner("Running OCR..."):
+                    text = ocr.extract_text(uploaded_file, config_option)
+                img = Image.open(uploaded_file)
 
-    elif image_option == 'Example':
-        text = ocr.extract_text(uploaded_file, config_option)
-
-    # Run object detection
-    with st.spinner("Running ocr..."):
-        if uploaded_file is not None:
-            img = Image.open(uploaded_file)
+        if img is not None:
             with st.expander(label='Preview image:', expanded=True):
                 st.image(img)
             if text:
                 st.info(f"Detected text: \n\n{text}")
+
+    except Exception as e:
+        st.error(f"Error processing image: {str(e)}")
+    finally:
+        if temp_file_path and os.path.exists(temp_file_path):
+            try:
+                os.unlink(temp_file_path)
+            except OSError:
+                pass
 
