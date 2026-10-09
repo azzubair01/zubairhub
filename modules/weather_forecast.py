@@ -8,7 +8,10 @@ import plotly.express as px
 
 # Weather condition to image mapping
 WEATHER_IMAGES = {
-    "default": None
+    "sunny": "images/sunny.jpg",
+    "rainy": "images/rainy.jpg",
+    "storm": "images/storm.jpg",
+    "default": "images/default.jpg"
 }
 
 API_BASE_URL = 'https://api.data.gov.my/weather/forecast'
@@ -30,7 +33,23 @@ def fetch_weather_data(location):
 
 def get_weather_image(weather_status):
     """Return the appropriate weather image based on the forecast."""
-    # Since images are missing, returning None to avoid MediaFileStorageError
+    if not weather_status:
+        weather_status = "default"
+    status_lower = str(weather_status).lower()
+
+    if any(k in status_lower for k in ["ribut", "thunder", "storm"]):
+        img_path = WEATHER_IMAGES.get("storm")
+    elif "tiada hujan" in status_lower or "no rain" in status_lower:
+        img_path = WEATHER_IMAGES.get("default")
+    elif any(k in status_lower for k in ["hujan", "rain", "shower"]):
+        img_path = WEATHER_IMAGES.get("rainy")
+    elif any(k in status_lower for k in ["cerah", "panas", "clear", "sun", "fair"]):
+        img_path = WEATHER_IMAGES.get("sunny")
+    else:
+        img_path = WEATHER_IMAGES.get("default")
+
+    if img_path and os.path.exists(img_path):
+        return img_path
     return None
 
 def weather_forecast():
@@ -72,7 +91,7 @@ def weather_forecast():
     current_weather = weather_data[0].get("summary_forecast", "default") if weather_data else "default"
     weather_image = get_weather_image(current_weather)
     if weather_image:
-        st.image(weather_image, use_column_width=True)
+        st.image(weather_image, use_container_width=True)
 
     # Process data for display
     if weather_data:

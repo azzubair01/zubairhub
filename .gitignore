@@ -162,3 +162,7 @@ cython_debug/
 zubairhub/
 .DS_Store
 venv_arm64/
+venv_x86_64/
+Untitled.ipynb
+prasarana_route.ipynb
+*.xlsx.bak
